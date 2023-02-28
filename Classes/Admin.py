@@ -8,6 +8,31 @@ class Admin(Person):
         self.username = "admin"
         self.password = "admin123"
 
+    def delete_member(self):
+        members = self.get_members()
+        self.print_all_member_names(members)
+        try:
+            member_id = int(input("Give the identity of the user you would like to delete: "))
+            sorted_members = sorted(members, key = lambda m: int(m["Number"]))
+            member_to_delete = self.binary_search_for_member_by_identity(sorted_members, 0, len(sorted_members), member_id)
+            sorted_members.remove(member_to_delete)
+            self.update_members(sorted_members)
+        except:
+            print("Invalid member identity, please try again.")
+            self.delete_member()
+
+    def binary_search_for_member_by_identity(self, data, low, high, value):
+        if low > high:
+            return None
+        middle = (low+high)//2
+        member_id = int(data[middle]['Number'])
+        if member_id > value:
+            return self.binary_search_for_member_by_identity(data, low, middle - 1, value)
+        elif member_id < value:
+            return self.binary_search_for_member_by_identity(data, middle + 1, high, value)
+        else:
+            return data[middle]
+
     def add_member(self):
         members = self.get_members()
         new_member = self.create_member()
@@ -43,12 +68,12 @@ class Admin(Person):
         else:
             print("There are no members to update.")
 
-
-    def print_all_member_names(self):
-        members = self.get_members()
+    def print_all_member_names(self, members = None):
+        if members is None:
+            members = self.get_members()
         for member in members:
             member_full_name = member['GivenName'] + " " + member['Surname']
-            print(member_full_name)
+            print(f"[{member['Number']}] {member_full_name}")
 
     def get_members(self):
         file_path = "Data/Members.json"
