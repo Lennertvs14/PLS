@@ -84,7 +84,7 @@
     "TelephoneNumber": "06-50015976"
   },
   {
-        "Number": "8",
+        "Number": 8,
         "GivenName": "Bartholome",
         "Surname": "Filippo",
         "StreetAddress": "Helmerslaan 124",
@@ -96,7 +96,7 @@
         "TelephoneNumber": "06-67324675"
     },
     {
-        "Number": "9",
+        "Number": 9,
         "GivenName": "Andreia",
         "Surname": "Sijtsma",
         "StreetAddress": "Van Arkelstraat 141",
@@ -108,7 +108,7 @@
         "TelephoneNumber": "06-23078929"
     },
     {
-        "Number": "10",
+        "Number": 10,
         "GivenName": "Ziad",
         "Surname": "Talen",
         "StreetAddress": "Ge van Rielstraat 59",
@@ -120,7 +120,7 @@
         "TelephoneNumber": "06-10432698"
     },
     {
-        "Number": "11",
+        "Number": 11,
         "GivenName": "Rodin",
         "Surname": "Reuser",
         "StreetAddress": "Walstraat 43",
@@ -132,7 +132,7 @@
         "TelephoneNumber": "06-52718159"
     },
     {
-        "Number": "12",
+        "Number": 12,
         "GivenName": "Enno",
         "Surname": "Wemmers",
         "StreetAddress": "Draadrusplein 83",
@@ -144,7 +144,7 @@
         "TelephoneNumber": "06-43021268"
     },
     {
-        "Number": "13",
+        "Number": 13,
         "GivenName": "Amiet",
         "Surname": "Voorwinden",
         "StreetAddress": "Birkhoven 36",
