@@ -12,9 +12,6 @@ class Person:
         file_path = "Data/Members.json"
         with open(file_path) as file:
             members = json.load(file)
-        # TODO: Improve time complexity
-        member_identities = [obj['Number'] for obj in members]
-        member_identities = [int(identity) for identity in member_identities]
-        member_identities_sorted = sorted(member_identities)
-        return member_identities_sorted[-1] + 1
+        member_identities = {int(obj['Number'] for obj in members)}
+        return max(member_identities) + 1
 
