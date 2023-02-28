@@ -10,7 +10,7 @@ class Admin(Person):
 
     def delete_member(self):
         members = self.get_members()
-        self.print_all_member_names(members)
+        self.print_all_members(members)
         try:
             member_id = int(input("Give the identity of the user you would like to delete: "))
             sorted_members = sorted(members, key = lambda m: int(m["Number"]))
@@ -68,7 +68,7 @@ class Admin(Person):
         else:
             print("There are no members to update.")
 
-    def print_all_member_names(self, members = None):
+    def print_all_members(self, members = None):
         if members is None:
             members = self.get_members()
         for member in members:
