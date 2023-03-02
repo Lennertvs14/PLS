@@ -31,7 +31,7 @@ class Member(Person):
             elif input_is_correct and field_name == 'ZipCode':
                 return Member.validate_zip_code(input_value)
             elif input_is_correct and field_name == 'Username':
-                return Member.validate_credentials(field_name, input_value)
+                return Member.validate_username(input_value)
             else:
                 return False
         else:
@@ -50,13 +50,14 @@ class Member(Person):
         return re.match(zip_regex, zip_code) is not None
 
     @staticmethod
-    def validate_credentials(field, credential):
-        validation = credential == credential.lower()
-        if validation and field == 'Username':
-            member_usernames = Member.__get_member_usernames()
-            if credential in member_usernames:
-                validation = False
-        return validation
+    def validate_username(username):
+        username_is_lowercase = username == username.lower()
+        all_usernames = Member.__get_member_usernames()
+        username_is_unique = username not in all_usernames
+        if username_is_lowercase and username_is_unique:
+            return True
+        else:
+            return False
 
     @staticmethod
     def __get_member_usernames():
