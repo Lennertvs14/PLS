@@ -19,7 +19,7 @@ class Member(Person):
     @staticmethod
     def validate_field(field_name, input_value):
         input_value = input_value.strip()
-        special_validation_fields = ['EmailAddress', 'ZipCode', 'Username', 'Password']
+        special_validation_fields = ['EmailAddress', 'ZipCode', 'Username']
         field_is_string = isinstance(field_name, str)
 
         if field_is_string:
@@ -30,7 +30,7 @@ class Member(Person):
                 return Member.validate_email(input_value)
             elif input_is_correct and field_name == 'ZipCode':
                 return Member.validate_zip_code(input_value)
-            elif input_is_correct and field_name == 'Username' or field_name == 'Password':
+            elif input_is_correct and field_name == 'Username':
                 return Member.validate_credentials(field_name, input_value)
             else:
                 return False
