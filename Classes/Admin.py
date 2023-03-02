@@ -45,8 +45,7 @@ class Admin(Person):
         field_names = [attr for attr in dir(empty_member_object)
                        if not callable(getattr(empty_member_object, attr)) and not attr.startswith("__")]
         field_names.remove('id')
-        new_member = {'id': empty_member_object.id}
-
+        new_member = {'Number': empty_member_object.id}
         for field_name in field_names:
             # TODO: Process optional/required attributes
             while True:
@@ -56,7 +55,6 @@ class Admin(Person):
                     break
                 else:
                     print(f"Invalid {field_name} value, please try again.")
-
         return new_member
 
     def update_members(self, members):
