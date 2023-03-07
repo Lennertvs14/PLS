@@ -4,9 +4,38 @@ from Classes.Member import Member
 
 
 class Admin(Person):
+    admin_options = [
+        "Explore members",
+        "Add member",
+        "Edit member",
+        "Delete member",
+        "Explore catalog",
+        "Search catalog"
+    ]
+
     def __init__(self):
         self.username = "admin"
         self.password = "admin123"
+
+    def show_interface(self):
+        # Print user's options
+        print("What would you like to do?")
+        for i in range(len(self.admin_options)):
+            print(f" [{i+1}] {self.admin_options[i]}")
+        user_input = int(input("Enter the digit to choose: ").strip())
+        # Validate input
+        # TODO : Check if it is an integer and in range.
+        # Execute
+        switcher = {
+            1 : lambda: self.print_all_members(),
+            2 : lambda: self.add_member(),
+            3 : lambda: self.edit_member(),
+            4 : lambda: self.delete_member(),
+            5 : lambda: self.Catalog.print_all_books(),
+            6 : lambda: self.Catalog.search_for_book()
+        }
+        get_user_choice = switcher.get(user_input)
+        user_choice = get_user_choice()
 
     def add_member(self):
         members = self.get_members()
@@ -22,7 +51,7 @@ class Admin(Person):
         field_names.remove('id')
         new_member = {'Number': empty_member_object.id}
         for field_name in field_names:
-            # TODO: Process optional/required attributes
+            # TODO: Process optional/required attributes.
             while True:
                 value = input(f"Please enter the {field_name}: ")
                 if empty_member_object.validate_field(field_name, value):

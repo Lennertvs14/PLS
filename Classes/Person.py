@@ -1,11 +1,12 @@
 import json
-
+from Classes.Catalog import Catalog
 
 class Person:
     def __init__(self, username, password):
         self.id = Person.get_unique_identity()
-        self.username = username
-        self.password = password
+        self.Username = username
+        self.Password = password
+        self.Catalog = Catalog()
 
     @staticmethod
     def get_unique_identity():
@@ -17,7 +18,5 @@ class Person:
         file_path = "Data/Members.json"
         with open(file_path) as file:
             members = json.load(file)
-        member_identities = {int(obj['Number'] for obj in members)}
+        member_identities = {obj['Number'] for obj in members}
         return member_identities
-
-

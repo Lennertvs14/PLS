@@ -4,17 +4,38 @@ import json
 
 
 class Member(Person):
-    def __init__(self, given_name, surname, street_address, zip_code, city, email_address, username, password, telephone_number):
-        super().__init__(username, password)
-        self.GivenName = given_name
-        self.Surname = surname
-        self.StreetAddress = street_address
-        self.ZipCode = zip_code
-        self.City = city
-        self.EmailAddress = email_address
-        self.Username = username
-        self.Password = password
-        self.TelephoneNumber = telephone_number
+    member_options = [
+        "Explore catalog",
+        "Search catalog"
+    ]
+
+    def __init__(self, GivenName, Surname, StreetAddress, ZipCode, City, EmailAddress, Username, Password, TelephoneNumber):
+        super().__init__(Username, Password)
+        self.GivenName = GivenName
+        self.Surname = Surname
+        self.StreetAddress = StreetAddress
+        self.ZipCode = ZipCode
+        self.City = City
+        self.EmailAddress = EmailAddress
+        self.Username = Username
+        self.Password = Password
+        self.TelephoneNumber = TelephoneNumber
+
+    def show_interface(self):
+        # Print user's options
+        print("What would you like to do?")
+        for i in range(len(self.member_options)):
+            print(f" [{i+1}] {self.member_options[i]}")
+        user_input = int(input("Enter the digit to choose: ").strip())
+        # Validate input
+        # TODO : Check if it is an integer and in range.
+        # Execute
+        switcher = {
+            1 : lambda: self.Catalog.print_all_books(),
+            2 : lambda: self.Catalog.search_book()
+        }
+        get_user_choice = switcher.get(user_input)
+        user_choice = get_user_choice()
 
     @staticmethod
     def validate_field(field_name, input_value):
@@ -45,7 +66,6 @@ class Member(Person):
 
     @staticmethod
     def validate_zip_code(zip_code):
-        # TODO: Make optional
         zip_regex = r'^\d{4}\s?[A-Z]{2}$'
         return re.match(zip_regex, zip_code) is not None
 

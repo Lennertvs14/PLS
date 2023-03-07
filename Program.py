@@ -2,13 +2,18 @@ from Classes.Admin import Admin
 from Classes.Member import Member
 
 def main():
-    if isinstance(user, Admin):
-        print("Hi Admin!")
-    elif isinstance(user, Member):
-        print(f"Hi {user.GivenName}!")
-    else:
-        print("Something went wrong, please try again.")
-        return
+    try:
+        if isinstance(user, Admin):
+            user.show_interface()
+        else:
+            # Convert the user (dictionary) to a member (instance)
+            user.pop('Number')
+            member = Member(**user)
+            member.show_interface()
+    except Exception as excep:
+        print("")
+        print(f"The following error occurred:\n {excep}")
+        print("Please get in touch with a library admin to solve the issue.")
 
 
 def login():
@@ -33,6 +38,6 @@ def login():
 if __name__ == "__main__":
     library_admin = Admin()
     user = login()
-    user_logged_in = user is not None
-    if user_logged_in:
+    user_is_logged_in = user is not None
+    if user_is_logged_in:
         main()
