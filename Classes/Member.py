@@ -35,7 +35,9 @@ class Member(Person):
             2 : lambda: self.Catalog.search_book()
         }
         get_user_choice = switcher.get(user_input)
+        print("")
         user_choice = get_user_choice()
+
 
     @staticmethod
     def validate_field(field_name, input_value):

@@ -16,6 +16,7 @@ class Admin(Person):
     def __init__(self):
         self.username = "admin"
         self.password = "admin123"
+        super().__init__(self.username, self.password)
 
     def show_interface(self):
         # Print user's options
@@ -35,6 +36,7 @@ class Admin(Person):
             6 : lambda: self.Catalog.search_for_book()
         }
         get_user_choice = switcher.get(user_input)
+        print("")
         user_choice = get_user_choice()
 
     def add_member(self):
