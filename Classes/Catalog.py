@@ -1,5 +1,5 @@
 import json
-
+from Classes.Book import Book
 
 class Catalog:
     def __init__(self):
@@ -31,3 +31,27 @@ class Catalog:
                 print(f"    {book['title']} by {book['author']}")
         else:
             print("No matching books found.")
+
+    def add_book(self):
+        new_book = self.create_book_by_user_input()
+        new_book = Book(**new_book)
+        self.books.append(new_book)
+        self.update_books(books)
+
+    def create_book_by_user_input(self):
+        empty_book_object = Book("", "", "", "", "", 0, "", "", "")
+        field_names = [attr for attr in dir(empty_book_object)
+                       if not callable(getattr(empty_book_object, attr)) and not attr.startswith("__")]
+        new_book = {}
+        for field_name in field_names:
+            while True:
+                value = input(f"Please enter the {field_name}: ")
+                if empty_book_object.validate_field(field_name, value):
+                    new_book[field_name] = value
+                    break
+                else:
+                    print(f"Invalid {field_name} value, please try again.")
+        return new_book
+
+    def update_books(self, books):
+        

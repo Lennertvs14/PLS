@@ -10,7 +10,8 @@ class Admin(Person):
         "Edit member",
         "Delete member",
         "Explore catalog",
-        "Search catalog"
+        "Search catalog",
+        "Add book",
     ]
 
     def __init__(self):
@@ -34,6 +35,8 @@ class Admin(Person):
             4 : lambda: self.delete_member(),
             5 : lambda: self.Catalog.print_all_books(),
             6 : lambda: self.Catalog.search_for_book()
+            8 : lambda: self.Catalog.edit_book(),
+            8 : lambda: self.Catalog.delete_book()
         }
         get_user_choice = switcher.get(user_input)
         print("")
@@ -41,19 +44,18 @@ class Admin(Person):
 
     def add_member(self):
         members = self.get_members()
-        new_member = self.create_member()
+        new_member = self.create_member_by_user_input()
         members.append(new_member)
         self.update_members(members)
 
     @staticmethod
-    def create_member():
+    def create_member_by_user_input():
         empty_member_object = Member("", "", "", "", "", "", "", "", "")
         field_names = [attr for attr in dir(empty_member_object)
                        if not callable(getattr(empty_member_object, attr)) and not attr.startswith("__")]
         field_names.remove('id')
         new_member = {'Number': empty_member_object.id}
         for field_name in field_names:
-            # TODO: Process optional/required attributes.
             while True:
                 value = input(f"Please enter the {field_name}: ")
                 if empty_member_object.validate_field(field_name, value):

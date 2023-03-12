@@ -10,9 +10,9 @@ def main():
             user.pop('Number')
             member = Member(**user)
             member.show_interface()
-    except Exception as excep:
+    except Exception as exception:
         print("")
-        print(f"The following error occurred:\n {excep}")
+        print(f"The following error occurred:\n {exception}")
         print("Please get in touch with a library admin to solve the issue.")
 
 
