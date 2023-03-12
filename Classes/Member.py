@@ -22,21 +22,24 @@ class Member(Person):
         self.TelephoneNumber = TelephoneNumber
 
     def show_interface(self):
-        # Print user's options
-        print("What would you like to do?")
-        for i in range(len(self.member_options)):
-            print(f" [{i+1}] {self.member_options[i]}")
-        user_input = int(input("Enter the digit to choose: ").strip())
-        # Validate input
-        # TODO : Check if it is an integer and in range.
-        # Execute
         switcher = {
             1 : lambda: self.Catalog.print_all_books(),
             2 : lambda: self.Catalog.search_book()
         }
-        get_user_choice = switcher.get(user_input)
-        print("")
-        user_choice = get_user_choice()
+        # Print user's options
+        print("What would you like to do?")
+        for i in range(len(self.member_options)):
+            print(f" [{i+1}] {self.member_options[i]}")
+        user_input = input("Enter a digit to choose: ").strip()
+        # Validate input
+        if user_input.isdigit() and 0 < int(user_input) < len(switcher):
+            # Execute
+            get_user_choice = switcher.get(user_input)
+            print("")
+            user_choice = get_user_choice()
+        else:
+            print("Invalid input, please try again.")
+            return self.show_interface()
 
 
     @staticmethod

@@ -20,14 +20,6 @@ class Admin(Person):
         super().__init__(self.username, self.password)
 
     def show_interface(self):
-        # Print user's options
-        print("What would you like to do?")
-        for i in range(len(self.admin_options)):
-            print(f" [{i+1}] {self.admin_options[i]}")
-        user_input = int(input("Enter the digit to choose: ").strip())
-        # Validate input
-        # TODO : Check if it is an integer and in range.
-        # Execute
         switcher = {
             1 : lambda: self.print_all_members(),
             2 : lambda: self.add_member(),
@@ -38,9 +30,20 @@ class Admin(Person):
             8 : lambda: self.Catalog.edit_book(),
             8 : lambda: self.Catalog.delete_book()
         }
-        get_user_choice = switcher.get(user_input)
-        print("")
-        user_choice = get_user_choice()
+        # Print user's options
+        print("\nWhat would you like to do?")
+        for i in range(len(self.admin_options)):
+            print(f" [{i+1}] {self.admin_options[i]}")
+        user_input = input("Enter a digit to choose: ").strip()
+        # Validate input
+        if user_input.isdigit() and 0 < int(user_input) <= len(switcher):
+            # Execute
+            get_user_choice = switcher.get(int(user_input))
+            print("")
+            user_choice = get_user_choice()
+        else:
+            print("Invalid input, please try again.")
+            return self.show_interface()
 
     def add_member(self):
         members = self.get_members()
