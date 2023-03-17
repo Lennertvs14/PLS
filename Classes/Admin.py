@@ -75,13 +75,9 @@ class Admin(Person):
         self.update_members(sorted_members)
 
     def update_members(self, members):
-        members_list_is_not_empty = len(members) > 0
-        if members_list_is_not_empty:
-            file_path = "Data/Members.json"
-            with open(file_path, 'w') as file:
-                json.dump(members, file, indent=2)
-        else:
-            print("There are no members to update.")
+        file_path = "Data/Members.json"
+        with open(file_path, 'w') as file:
+            json.dump(members, file, indent=2)
 
     def print_all_members(self, members = None):
         if members is None:
