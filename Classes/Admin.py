@@ -21,19 +21,18 @@ class Admin(Person):
 
     def show_interface(self):
         switcher = {
-            1 : lambda: self.print_all_members(),
-            2 : lambda: self.add_member(),
-            3 : lambda: self.edit_member(),
-            4 : lambda: self.delete_member(),
-            5 : lambda: self.Catalog.print_all_books(),
-            6 : lambda: self.Catalog.search_for_book()
-            8 : lambda: self.Catalog.edit_book(),
-            8 : lambda: self.Catalog.delete_book()
+            1: lambda: self.print_all_members(),
+            2: lambda: self.add_member(),
+            3: lambda: self.edit_member(),
+            4: lambda: self.delete_member(),
+            5: lambda: self.Catalog.print_all_books(),
+            6: lambda: self.Catalog.search_for_book(),
+            7: lambda: self.Catalog.add_book()
         }
         # Print user's options
         print("\nWhat would you like to do?")
         for i in range(len(self.admin_options)):
-            print(f" [{i+1}] {self.admin_options[i]}")
+            print(f" [{i + 1}] {self.admin_options[i]}")
         user_input = input("Enter a digit to choose: ").strip()
         # Validate input
         if user_input.isdigit() and 0 < int(user_input) <= len(switcher):
@@ -69,7 +68,7 @@ class Admin(Person):
         return new_member
 
     def delete_member(self):
-        sorted_members = sorted(self.get_members(), key = lambda m: int(m["Number"]))
+        sorted_members = sorted(self.get_members(), key=lambda m: int(m["Number"]))
         member_to_delete = self.get_member_by_identity_input(sorted_members, True)
         sorted_members.remove(member_to_delete)
         self.update_members(sorted_members)
@@ -79,7 +78,7 @@ class Admin(Person):
         with open(file_path, 'w') as file:
             json.dump(members, file, indent=2)
 
-    def print_all_members(self, members = None):
+    def print_all_members(self, members=None):
         if members is None:
             members = self.get_members()
         for member in members:
@@ -116,7 +115,7 @@ class Admin(Person):
                 self.update_members(members)
                 break
 
-    def get_member_by_identity_input(self, members = None, members_are_sorted = False):
+    def get_member_by_identity_input(self, members=None, members_are_sorted=False):
         """
         Returns a member object based on their identity number.
 
@@ -127,7 +126,7 @@ class Admin(Person):
         if members is None:
             sorted_members = sorted(self.get_members(), key=lambda m: int(m["Number"]))
         elif not members_are_sorted:
-            sorted_members = sorted(members, key = lambda m: int(m["Number"]))
+            sorted_members = sorted(members, key=lambda m: int(m["Number"]))
         else:
             sorted_members = members
         self.print_all_members(sorted_members)
@@ -145,7 +144,7 @@ class Admin(Person):
     def binary_search_for_member_by_identity(self, data, low, high, value):
         if low > high:
             return None
-        middle = (low+high)//2
+        middle = (low + high) // 2
         member_id = int(data[middle]['Number'])
         if member_id > value:
             return self.binary_search_for_member_by_identity(data, low, middle - 1, value)
