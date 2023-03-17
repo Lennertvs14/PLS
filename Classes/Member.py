@@ -23,13 +23,13 @@ class Member(Person):
 
     def show_interface(self):
         switcher = {
-            1 : lambda: self.Catalog.print_all_books(),
-            2 : lambda: self.Catalog.search_book()
+            1: lambda: self.Catalog.print_all_books(),
+            2: lambda: self.Catalog.search_book()
         }
         # Print user's options
         print("What would you like to do?")
         for i in range(len(self.member_options)):
-            print(f" [{i+1}] {self.member_options[i]}")
+            print(f" [{i + 1}] {self.member_options[i]}")
         user_input = input("Enter a digit to choose: ").strip()
         # Validate input
         if user_input.isdigit() and 0 < int(user_input) < len(switcher):
@@ -41,28 +41,22 @@ class Member(Person):
             print("Invalid input, please try again.")
             return self.show_interface()
 
-
     @staticmethod
     def validate_field(field_name, input_value):
-        input_value = input_value.strip()
         special_validation_fields = ['EmailAddress', 'ZipCode', 'Username']
-        field_is_string = isinstance(field_name, str)
-
-        if field_is_string:
-            input_is_correct = isinstance(input_value, str) and 0 < len(input_value) < 100
-            if field_name not in special_validation_fields:
-                return input_is_correct
-            elif input_is_correct and field_name == 'EmailAddress':
-                return Member.validate_email(input_value)
-            elif input_is_correct and field_name == 'ZipCode':
-                return Member.validate_zip_code(input_value)
-            elif input_is_correct and field_name == 'Username':
-                return Member.validate_username(input_value)
+        # There are no integer fields to validate yet.
+        input_is_correct = 0 < len(input_value) < 100
+        if input_is_correct:
+            if field_name in special_validation_fields:
+                if field_name == 'EmailAddress':
+                    return Member.validate_email(input_value)
+                elif field_name == 'ZipCode':
+                    return Member.validate_zip_code(input_value)
+                else:
+                    return Member.validate_username(input_value)
             else:
-                return False
-        else:
-            # There are no integer fields to validate yet.
-            return True
+                return True
+        return False
 
     @staticmethod
     def validate_email(email):

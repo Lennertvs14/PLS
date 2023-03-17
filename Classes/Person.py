@@ -1,6 +1,7 @@
 import json
 from Classes.Catalog import Catalog
 
+
 class Person:
     def __init__(self, username, password):
         self.id = Person.get_unique_identity()
