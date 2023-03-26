@@ -1,4 +1,7 @@
 import json
+
+from Classes.Book import Book
+from Classes.Catalog import Catalog
 from Classes.Person import Person
 from Classes.Member import Member
 
@@ -27,7 +30,7 @@ class Admin(Person):
             4: lambda: self.delete_member(),
             5: lambda: self.Catalog.print_all_books(),
             6: lambda: self.Catalog.search_for_book(),
-            7: lambda: self.Catalog.add_book()
+            7: lambda: self.add_book()
         }
         # Print user's options
         print("\nWhat would you like to do?")
@@ -59,7 +62,7 @@ class Admin(Person):
         new_member = {'Number': empty_member_object.id}
         for field_name in field_names:
             while True:
-                value = input(f"Please enter the {field_name}: ")
+                value = input(f"Please enter the {field_name}: ").strip()
                 if empty_member_object.validate_field(field_name, value):
                     new_member[field_name] = value
                     break
@@ -152,3 +155,15 @@ class Admin(Person):
             return self.binary_search_for_member_by_identity(data, middle + 1, high, value)
         else:
             return data[middle]
+
+    def add_book(self):
+        new_book = Book.create_book_by_user_input()
+        books = Catalog.get_books()
+        books.append(new_book)
+        self.__update_books(books)
+        self.Catalog.books.append(new_book)
+
+    def __update_books(self, books):
+        file_path = "Data/Books.json"
+        with open(file_path, 'w') as file:
+            json.dump(books, file, indent=2)

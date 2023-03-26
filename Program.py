@@ -1,6 +1,7 @@
 from Classes.Admin import Admin
 from Classes.Member import Member
 
+
 def main():
     try:
         if isinstance(user, Admin):
