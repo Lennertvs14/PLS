@@ -493,5 +493,27 @@
     "title": "Memoirs of Hadrian",
     "ISBN": "9781231577095",
     "year": 1951
+  },
+  {
+    "ISBN": "9780132350884",
+    "author": "Robert Martin",
+    "country": "United States",
+    "imageLink": "images/clean-code.jpg",
+    "language": "English",
+    "link": "https://en.wikipedia.org/wiki/Robert_C._Martin",
+    "pages": 431,
+    "title": "Clean Code",
+    "year": 2008
+  },
+  {
+    "ISBN": "9780321146533",
+    "author": "Kent Beck",
+    "country": "United States",
+    "imageLink": "images/test-driven-development.jpg",
+    "language": "English",
+    "link": "https://en.wikipedia.org/wiki/Test-driven_development",
+    "pages": 240,
+    "title": "Test Driven Development",
+    "year": 2002
   }
 ]

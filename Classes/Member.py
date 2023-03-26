@@ -6,7 +6,9 @@ import json
 class Member(Person):
     member_options = [
         "Explore catalog",
-        "Search catalog"
+        "Search catalog",
+        "Explore book items",
+        "Search book items"
     ]
 
     def __init__(self, GivenName, Surname, StreetAddress, ZipCode, City, EmailAddress, Username, Password, TelephoneNumber):
@@ -22,19 +24,23 @@ class Member(Person):
         self.TelephoneNumber = TelephoneNumber
 
     def show_interface(self):
+        from Program import get_library_object
+        temp_library = get_library_object()
         switcher = {
             1: lambda: self.Catalog.print_all_books(),
-            2: lambda: self.Catalog.search_book()
+            2: lambda: self.Catalog.search_for_book(),
+            3: lambda: temp_library.print_all_book_items(),
+            4: lambda: temp_library.search_for_book_item()
         }
         # Print user's options
-        print("What would you like to do?")
+        print("\nWhat would you like to do?")
         for i in range(len(self.member_options)):
             print(f" [{i + 1}] {self.member_options[i]}")
         user_input = input("Enter a digit to choose: ").strip()
         # Validate input
-        if user_input.isdigit() and 0 < int(user_input) < len(switcher):
+        if user_input.isdigit() and 0 < int(user_input) <= len(switcher):
             # Execute
-            get_user_choice = switcher.get(user_input)
+            get_user_choice = switcher.get(int(user_input))
             print("")
             user_choice = get_user_choice()
         else:

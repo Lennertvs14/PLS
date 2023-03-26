@@ -15,6 +15,8 @@ class Admin(Person):
         "Explore catalog",
         "Search catalog",
         "Add book",
+        "Explore book items",
+        "Search book item"
     ]
 
     def __init__(self):
@@ -23,6 +25,8 @@ class Admin(Person):
         super().__init__(self.username, self.password)
 
     def show_interface(self):
+        from Program import get_library_object
+        temp_library = get_library_object()
         switcher = {
             1: lambda: self.print_all_members(),
             2: lambda: self.add_member(),
@@ -30,7 +34,9 @@ class Admin(Person):
             4: lambda: self.delete_member(),
             5: lambda: self.Catalog.print_all_books(),
             6: lambda: self.Catalog.search_for_book(),
-            7: lambda: self.add_book()
+            7: lambda: self.add_book(),
+            8: lambda: temp_library.print_all_book_items(),
+            9: lambda: temp_library.search_for_book_item()
         }
         # Print user's options
         print("\nWhat would you like to do?")
