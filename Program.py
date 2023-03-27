@@ -1,6 +1,5 @@
 from Classes.Admin import Admin
 from Classes.Member import Member
-from Classes.Library import Library
 
 
 def main():
@@ -36,13 +35,6 @@ def login():
         print(f"You have {attempts} attempts left.")
     return None
 
-
-def get_library_object():
-    global library
-    return library
-
-
-library = Library()
 
 if __name__ == "__main__":
     library_admin = Admin()

@@ -1,5 +1,5 @@
 import json
-from Classes.Catalog import Catalog
+from Classes.LibrarySystem import LibrarySystem
 
 
 class Person:
@@ -7,7 +7,7 @@ class Person:
         self.id = Person.get_unique_identity()
         self.Username = username
         self.Password = password
-        self.Catalog = Catalog()
+        self.library_system = LibrarySystem()
 
     @staticmethod
     def get_unique_identity():

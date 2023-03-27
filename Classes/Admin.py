@@ -1,7 +1,6 @@
 import json
 
 from Classes.Book import Book
-from Classes.Catalog import Catalog
 from Classes.Person import Person
 from Classes.Member import Member
 
@@ -25,18 +24,16 @@ class Admin(Person):
         super().__init__(self.username, self.password)
 
     def show_interface(self):
-        from Program import get_library_object
-        temp_library = get_library_object()
         switcher = {
             1: lambda: self.print_all_members(),
             2: lambda: self.add_member(),
             3: lambda: self.edit_member(),
             4: lambda: self.delete_member(),
-            5: lambda: self.Catalog.print_all_books(),
-            6: lambda: self.Catalog.search_for_book(),
+            5: lambda: self.library_system.catalog.print_all_books(),
+            6: lambda: self.library_system.catalog.search_for_book(),
             7: lambda: self.add_book(),
-            8: lambda: temp_library.print_all_book_items(),
-            9: lambda: temp_library.search_for_book_item()
+            8: lambda: self.library_system.library.print_all_book_items(),
+            9: lambda: self.library_system.library.search_for_book_item()
         }
         # Print user's options
         print("\nWhat would you like to do?")
@@ -164,7 +161,7 @@ class Admin(Person):
 
     def add_book(self):
         new_book = Book.create_book_by_user_input()
-        books = Catalog.get_books()
+        books = self.library_system.catalog.get_books()
         books.append(new_book)
         self.__update_books(books)
         self.Catalog.books.append(new_book)

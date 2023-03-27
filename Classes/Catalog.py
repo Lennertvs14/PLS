@@ -1,12 +1,11 @@
 import json
-from Classes.Book import Book
+
 
 class Catalog:
     def __init__(self):
         self.books = self.get_books()
 
-    @staticmethod
-    def get_books():
+    def get_books(self):
         file_path = "Data/Books.json"
         with open(file_path) as file:
             books = json.load(file)
@@ -15,7 +14,7 @@ class Catalog:
     def print_all_books(self):
         count = 0
         for book in self.books:
-            print(f"[{count+1}] {book['title']} by {book['author']}")
+            print(f"[{count + 1}] {book['title']} by {book['author']}")
             count += 1
 
     def search_for_book(self):
