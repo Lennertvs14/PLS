@@ -82,20 +82,18 @@ class Member(Person):
         if borrowed_books < max_amount_of_books_to_have:
             book_item_to_loan = self.library_system.library.get_book_item_by_user_input()
             if borrowed_books > 0:
-                if not self.book_item_is_available(book_item_to_loan):
+                if self.user_already_borrows_book_item(book_item_to_loan):
                     print("You are already borrowing this book.")
                     return
             self.library_system.borrow_book_item(self, book_item_to_loan)
         else:
             print("You are not allowed to borrow more than 3 books, simultaneously.")
 
-    def book_item_is_available(self, book_item):
-        if book_item['copies'] < 1:
-            return False
+    def user_already_borrows_book_item(self, book_item):
         for loan_item in self.get_loan_items:
             if loan_item['book_item']['ISBN'] == book_item["ISBN"]:
-                return False
-        return True
+                return True
+        return False
 
     @staticmethod
     def validate_field(field_name, input_value):
