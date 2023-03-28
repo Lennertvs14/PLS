@@ -32,7 +32,7 @@ class Library:
             json.dump(book_items, file, indent=2)
 
     def get_book_item_by_user_input(self):
-        sorted_book_items = self.print_all_book_items(should_sort=True)
+        sorted_book_items = self.print_all_book_items(should_sort=True, only_available_items=True)
         book_id = int(input("\nGive the identity of the book you would like to move forward with: ").strip()) - 1
         if 0 <= book_id <= len(sorted_book_items):
             book_item = sorted_book_items[book_id]
@@ -40,11 +40,20 @@ class Library:
         else:
             raise ValueError("The chosen book item does not exist after all")
 
-    def print_all_book_items(self, should_sort=False):
+    def print_all_book_items(self, should_sort=False, only_available_items=False):
+        """
+        Prints information about all book items in the library.
+
+        Arguments:
+        should_sort -- If True, sorts the book items by book title (default False).
+        only_available_items -- If True, only shows book items that are available (default False).
+        """
         print("")
         book_items = self.book_items
         if should_sort:
             book_items = sorted(book_items, key=lambda b: b['book']['title'])
+        if only_available_items:
+            book_items = [b for b in book_items if b['copies'] > 0]
         for count, book_item in enumerate(book_items, start=1):
             print(
                 f"    [{count}] {book_item['copies']}x - {book_item['book']['title']} by {book_item['book']['author']}")
