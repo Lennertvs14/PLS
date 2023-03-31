@@ -54,13 +54,11 @@ class Member(Person):
             return None
 
     def show_interface(self):
-        from Classes.LibrarySystem import LibrarySystem
-        library_system = LibrarySystem()
         switcher = {
-            1: lambda: library_system.catalog.print_all_books(),
-            2: lambda: library_system.catalog.search_for_book(),
-            3: lambda: library_system.library.print_all_book_items(),
-            4: lambda: library_system.library.search_for_book_item(),
+            1: lambda: self.catalog.print_all_books(),
+            2: lambda: self.catalog.search_for_book(),
+            3: lambda: self.library.print_all_book_items(),
+            4: lambda: self.library.search_for_book_item(),
             5: lambda: self.borrow_book_item(),
             6: lambda: self.return_book_item()
         }

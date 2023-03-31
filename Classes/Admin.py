@@ -31,11 +31,11 @@ class Admin(Person):
             2: lambda: self.add_member(),
             3: lambda: self.edit_member(),
             4: lambda: self.delete_member(),
-            5: lambda: library_system.catalog.print_all_books(),
-            6: lambda: library_system.catalog.search_for_book(),
+            5: lambda: self.catalog.print_all_books(),
+            6: lambda: self.catalog.search_for_book(),
             7: lambda: self.add_book(),
-            8: lambda: library_system.library.print_all_book_items(),
-            9: lambda: library_system.library.search_for_book_item()
+            8: lambda: self.library.print_all_book_items(),
+            9: lambda: self.library.search_for_book_item()
         }
         # Print user's options
         print("\nWhat would you like to do?")

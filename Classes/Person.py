@@ -4,7 +4,7 @@ import json
 
 class Person(LibrarySystem):
     def __init__(self):
-        super.__init__()
+        super().__init__()
         self.national_insurance_number = Person.get_new_national_insurance_number()
 
     @staticmethod
