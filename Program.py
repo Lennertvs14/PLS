@@ -8,9 +8,11 @@ def main():
             user.show_interface()
         else:
             # Convert the user (dictionary) to a member (instance)
-            user.pop('Number')
+            if 'Number' in user:
+                user.pop('Number')
             member = Member(**user)
             member.show_interface()
+        return main()
     except Exception as exception:
         print("")
         print(f"The following error occurred:\n {exception}")
@@ -19,7 +21,7 @@ def main():
 
 def login():
     print("Welcome!\n")
-    members = library_admin.get_members()
+    members = library_admin.get_data("Data/Members.json")
     attempts = 3
     while attempts > 0:
         username = input("Enter your username: ").strip()
