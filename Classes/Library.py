@@ -38,7 +38,7 @@ class Library:
             book_item = sorted_book_items[book_id]
             return book_item
         else:
-            raise ValueError("The chosen book item does not exist after all")
+            raise ValueError(f"Your input ({book_id}) is invalid.")
 
     def print_all_book_items(self, should_sort=False, only_available_items=False):
         """

@@ -59,7 +59,8 @@ class Member(Person):
             2: lambda: self.library_system.catalog.search_for_book(),
             3: lambda: self.library_system.library.print_all_book_items(),
             4: lambda: self.library_system.library.search_for_book_item(),
-            5: lambda: self.borrow_book_item()
+            5: lambda: self.borrow_book_item(),
+            6: lambda: self.return_book_item()
         }
         # Print user's options
         print("\nWhat would you like to do?")
@@ -94,6 +95,34 @@ class Member(Person):
             if loan_item['book_item']['ISBN'] == book_item["ISBN"]:
                 return True
         return False
+
+    def return_book_item(self):
+        borrowed_books = self.borrowed_books
+        if borrowed_books > 0:
+            loan_item = self.__get_loan_item_to_return_by_user_input()
+            book_item_to_return = loan_item['book_item']
+            self.library_system.return_book_item(book_item_to_return, self.id)
+        else:
+            print("There is no book to return.")
+
+    def __get_loan_item_to_return_by_user_input(self):
+        loan_items = self.get_loan_items
+        self.__print_all_borrowed_book_items(loan_items)
+        loan_item_id = int(input("Give the identity of the book you would like to move forward with: ").strip()) - 1
+        if 0 <= loan_item_id < len(loan_items):
+            return loan_items[loan_item_id]
+        else:
+            raise ValueError(f"Your input ({loan_item_id}) is invalid.")
+
+    def __print_all_borrowed_book_items(self, loan_items=None):
+        print("Your borrowed books:")
+        if loan_items is None:
+            loan_items = self.get_loan_items
+        count = 1
+        for loan_item in loan_items:
+            print(f"   [{count}] '{loan_item['book_item']['book']['title']}'"
+                  f" by {loan_item['book_item']['book']['author']}.")
+            count += 1
 
     @staticmethod
     def validate_field(field_name, input_value):
