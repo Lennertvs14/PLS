@@ -1,8 +1,6 @@
-import json
-
 from Classes.Book import Book
-from Classes.Person import Person
 from Classes.Member import Member
+from Classes.Person import Person
 
 
 class Admin(Person):
@@ -11,11 +9,22 @@ class Admin(Person):
         "Add member",
         "Edit member",
         "Delete member",
+        "Check book item status for member",
+        "Add list of members",
         "Explore catalog",
-        "Search catalog",
         "Add book",
+        "Edit book",
+        "Delete book",
+        "Search catalog",
+        "Add list of books",
         "Explore book items",
-        "Search book item"
+        "Add book item",
+        "Edit book item",
+        "Delete book item",
+        "Search book item",
+        "Lend book item to member",
+        "Make backup",
+        "Restore backup"
     ]
 
     def __init__(self):
@@ -24,18 +33,36 @@ class Admin(Person):
         self.password = "admin123"
 
     def show_interface(self):
-        from Classes.LibrarySystem import LibrarySystem
-        library_system = LibrarySystem()
         switcher = {
             1: lambda: self.print_all_members(),
             2: lambda: self.add_member(),
             3: lambda: self.edit_member(),
             4: lambda: self.delete_member(),
-            5: lambda: self.catalog.print_all_books(),
-            6: lambda: self.catalog.search_for_book(),
-            7: lambda: self.add_book(),
-            8: lambda: self.library.print_all_book_items(),
-            9: lambda: self.library.search_for_book_item()
+            5: lambda: self.check_book_item_status_for_member(),
+            # TODO: add_list_of_members()
+            6: lambda: print("Not implemented yet."),
+            7: lambda: self.check_catalog(),
+            8: lambda: self.add_book(),
+            # TODO: edit_book()
+            9: lambda: print("Not implemented yet."),
+            # TODO: delete_book()
+            10: lambda: print("Not implemented yet."),
+            11: lambda: self.search_for_book(),
+            # TODO: add_list_of_books()
+            12: lambda: print("Not implemented yet."),
+            13: lambda: self.check_library(),
+            # TODO: add_book_item()
+            14: lambda: print("Not implemented yet."),
+            # TODO: edit_book_item()
+            15: lambda: print("Not implemented yet."),
+            # TODO: delete_book_item()
+            16: lambda: print("Not implemented yet."),
+            17: lambda: self.search_for_book_item(),
+            18: lambda: self.lend_book_item_to_member(),
+            # TODO: Backup.make_backup()
+            19: lambda: print("Not implemented yet."),
+            # TODO: Backup.restore_backup()
+            19: lambda: print("Not implemented yet.")
         }
         # Print user's options
         print("\nWhat would you like to do?")
@@ -53,10 +80,10 @@ class Admin(Person):
             return self.show_interface()
 
     def add_member(self):
-        members = self.get_members()
+        members = self.get_data("Data/Members.json")
         new_member = self.create_member_by_user_input()
         members.append(new_member)
-        self.update_members(members)
+        self.update_data("Data/Members.json", members)
 
     @staticmethod
     def create_member_by_user_input():
@@ -76,28 +103,17 @@ class Admin(Person):
         return new_member
 
     def delete_member(self):
-        sorted_members = sorted(self.get_members(), key=lambda m: int(m["Number"]))
+        sorted_members = sorted(self.get_data("Data/Members.json"), key=lambda m: int(m["Number"]))
         member_to_delete = self.get_member_by_identity_input(sorted_members, True)
         sorted_members.remove(member_to_delete)
-        self.update_members(sorted_members)
-
-    def update_members(self, members):
-        file_path = "Data/Members.json"
-        with open(file_path, 'w') as file:
-            json.dump(members, file, indent=2)
+        self.update_data("Data/Members.json", sorted_members)
 
     def print_all_members(self, members=None):
         if members is None:
-            members = self.get_members()
+            members = self.get_data("Data/Members.json")
         for member in members:
             member_full_name = member['GivenName'] + " " + member['Surname']
             print(f"[{member['Number']}] {member_full_name}")
-
-    def get_members(self):
-        file_path = "Data/Members.json"
-        with open(file_path) as file:
-            members = json.load(file)
-        return members
 
     def edit_member(self):
         member_to_edit = self.get_member_by_identity_input()
@@ -116,11 +132,11 @@ class Admin(Person):
                 break
         member_to_edit['Number'] = member_to_edit_identity
         print(f"\n{member_to_edit}")
-        members = self.get_members()
+        members = self.get_data("Data/Members.json")
         for i, member in enumerate(members):
             if member["Number"] == member_to_edit["Number"]:
                 members[i] = member_to_edit
-                self.update_members(members)
+                self.update_data("Data/Members.json", members)
                 break
 
     def get_member_by_identity_input(self, members=None, members_are_sorted=False):
@@ -132,7 +148,7 @@ class Admin(Person):
         :return: A member object if found, otherwise None.
         """
         if members is None:
-            sorted_members = sorted(self.get_members(), key=lambda m: int(m["Number"]))
+            sorted_members = sorted(self.get_data("Data/Members.json"), key=lambda m: int(m["Number"]))
         elif not members_are_sorted:
             sorted_members = sorted(members, key=lambda m: int(m["Number"]))
         else:
@@ -162,15 +178,8 @@ class Admin(Person):
             return data[middle]
 
     def add_book(self):
-        from Classes.Catalog import Catalog
-        catalog = Catalog()
         new_book = Book.create_book_by_user_input()
-        books = catalog.get_books()
+        books = self.catalog.get_books()
         books.append(new_book)
-        self.__update_books(books)
-        catalog.books.append(new_book)
-
-    def __update_books(self, books):
-        file_path = "Data/Books.json"
-        with open(file_path, 'w') as file:
-            json.dump(books, file, indent=2)
+        self.catalog.books.append(new_book)
+        self.update_data("Data/Books.json", books)

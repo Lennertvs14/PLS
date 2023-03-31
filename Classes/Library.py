@@ -60,19 +60,6 @@ class Library:
         if should_sort:
             return book_items
 
-    def search_for_book_item(self):
-        """ This search function accepts a book title or author as search key. """
-        search_term = input("Enter search term: ").lower()
-        matching_books = []
-        for book_item in self.book_items:
-            if search_term in book_item['book']["author"].lower() or search_term in book_item['book']["title"].lower():
-                matching_books.append(book_item)
-        if len(matching_books) > 0:
-            for book_item in matching_books:
-                print(f"    [{book_item['copies']}x] {book_item['book']['title']} by {book_item['book']['author']}")
-        else:
-            print("    No matching book item found.")
-
     def get_book_item_index_by_ISBN(self, ISBN):
         index = -1
         book_items = self.book_items

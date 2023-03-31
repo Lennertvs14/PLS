@@ -1,6 +1,6 @@
 from Classes.Person import Person
-import re
 import json
+import re
 
 
 class Member(Person):
@@ -27,20 +27,6 @@ class Member(Person):
 
     @property
     def borrowed_books(self):
-        count = 0
-        file_path = "Data/LoanItems.json"
-        try:
-            with open(file_path) as file:
-                loan_items = json.load(file)
-                for item in loan_items:
-                    if self.national_insurance_number == item['borrower']:
-                        count += 1
-                return count
-        except Exception as e:
-            return count
-
-    @property
-    def get_loan_items(self):
         file_path = "Data/LoanItems.json"
         loan_items_for_member = []
         try:
@@ -55,10 +41,10 @@ class Member(Person):
 
     def show_interface(self):
         switcher = {
-            1: lambda: self.catalog.print_all_books(),
-            2: lambda: self.catalog.search_for_book(),
-            3: lambda: self.library.print_all_book_items(),
-            4: lambda: self.library.search_for_book_item(),
+            1: lambda: self.check_catalog(),
+            2: lambda: self.search_for_book(),
+            3: lambda: self.check_library(),
+            4: lambda: self.search_for_book_item(),
             5: lambda: self.borrow_book_item(),
             6: lambda: self.return_book_item()
         }
@@ -78,35 +64,62 @@ class Member(Person):
             return self.show_interface()
 
     def borrow_book_item(self):
+        from Classes.LoanItem import LoanItem
         borrowed_books = self.borrowed_books
         max_amount_of_books_to_have = 3
-        if borrowed_books < max_amount_of_books_to_have:
-            book_item_to_loan = self.library_system.library.get_book_item_by_user_input()
-            if borrowed_books > 0:
+        if borrowed_books is None or len(borrowed_books) < max_amount_of_books_to_have:
+            book_item_to_loan = self.library.get_book_item_by_user_input()
+            if borrowed_books is not None:
                 if self.user_already_borrows_book_item(book_item_to_loan):
                     print("You are already borrowing this book.")
                     return
-            self.library_system.borrow_book_item(self, book_item_to_loan)
+            loan_item = LoanItem(self, book_item_to_loan)
+            # Update the library's book items.
+            book_item_list_index = self.library.get_book_item_index_by_ISBN(book_item_to_loan['book']['ISBN'])
+            self.library.book_items[book_item_list_index]['copies'] -= 1
+            # Update the corresponding json data storage file.
+            self.update_data("Data/BookItems.json", self.library.book_items)
+            # Give user a success notification.
+            print(f"You successfully loaned '{book_item_to_loan['book']['title']}' "
+                  f"by {book_item_to_loan['book']['author']}.")
+            print(f"We expect you to return it before {loan_item.due_date}.")
         else:
             print("You are not allowed to borrow more than 3 books, simultaneously.")
 
     def user_already_borrows_book_item(self, book_item):
-        for loan_item in self.get_loan_items:
+        for loan_item in self.borrowed_books:
             if loan_item['book_item']['ISBN'] == book_item["ISBN"]:
                 return True
         return False
 
     def return_book_item(self):
-        borrowed_books = self.borrowed_books
+        borrowed_books = len(self.borrowed_books)
         if borrowed_books > 0:
             loan_item = self.__get_loan_item_to_return_by_user_input()
             book_item_to_return = loan_item['book_item']
-            self.library_system.return_book_item(book_item_to_return, self.national_insurance_number)
+            # Update the library's book items.
+            library_book_item_index = self.library.get_book_item_index_by_ISBN(book_item_to_return['book']['ISBN'])
+            if library_book_item_index != -1:
+                self.library.book_items[library_book_item_index]['copies'] += 1
+                self.library.update_book_items(self.library.book_items)
+                # Update the loan items' data storage file.
+                loan_items = self.get_data("Data/LoanItems.json")
+                for loan_item in loan_items:
+                    members_are_equal = str(loan_item['borrower']) == str(self.national_insurance_number)
+                    international_standard_book_numbers_are_equal = \
+                        str(loan_item['book_item']['ISBN']) == str(book_item_to_return['ISBN'])
+                    if members_are_equal and international_standard_book_numbers_are_equal:
+                        loan_items.remove(loan_item)
+                self.update_data("Data/LoanItems.json", loan_items)
+                print(f"You successfully returned '{book_item_to_return['book']['title']}' "
+                      f"by {book_item_to_return['book']['author']}.")
+            else:
+                raise ValueError("This library did not loan this book to you.")
         else:
-            print("There is no book to return.")
+            print("You have no book to return.")
 
     def __get_loan_item_to_return_by_user_input(self):
-        loan_items = self.get_loan_items
+        loan_items = self.borrowed_books
         self.__print_all_borrowed_book_items(loan_items)
         loan_item_id = int(input("Give the identity of the book you would like to move forward with: ").strip()) - 1
         if 0 <= loan_item_id < len(loan_items):
@@ -117,7 +130,7 @@ class Member(Person):
     def __print_all_borrowed_book_items(self, loan_items=None):
         print("Your borrowed books:")
         if loan_items is None:
-            loan_items = self.get_loan_items
+            loan_items = self.borrowed_books
         count = 1
         for loan_item in loan_items:
             print(f"   [{count}] '{loan_item['book_item']['book']['title']}'"
