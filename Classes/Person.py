@@ -1,21 +1,17 @@
 import json
-from Classes.LibrarySystem import LibrarySystem
 
 
 class Person:
-    def __init__(self, username, password):
-        self.id = Person.get_unique_identity()
-        self.Username = username
-        self.Password = password
-        self.library_system = LibrarySystem()
+    def __init__(self):
+        self.national_insurance_number = Person.get_new_national_insurance_number()
 
     @staticmethod
-    def get_unique_identity():
-        member_identities = Person.get_member_identities()
+    def get_new_national_insurance_number():
+        member_identities = Person.__get_members_national_insurance_numbers()
         return max(member_identities) + 1
 
     @staticmethod
-    def get_member_identities():
+    def __get_members_national_insurance_numbers():
         file_path = "Data/Members.json"
         with open(file_path) as file:
             members = json.load(file)

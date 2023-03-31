@@ -19,21 +19,23 @@ class Admin(Person):
     ]
 
     def __init__(self):
+        super().__init__()
         self.username = "admin"
         self.password = "admin123"
-        super().__init__(self.username, self.password)
 
     def show_interface(self):
+        from Classes.LibrarySystem import LibrarySystem
+        library_system = LibrarySystem()
         switcher = {
             1: lambda: self.print_all_members(),
             2: lambda: self.add_member(),
             3: lambda: self.edit_member(),
             4: lambda: self.delete_member(),
-            5: lambda: self.library_system.catalog.print_all_books(),
-            6: lambda: self.library_system.catalog.search_for_book(),
+            5: lambda: library_system.catalog.print_all_books(),
+            6: lambda: library_system.catalog.search_for_book(),
             7: lambda: self.add_book(),
-            8: lambda: self.library_system.library.print_all_book_items(),
-            9: lambda: self.library_system.library.search_for_book_item()
+            8: lambda: library_system.library.print_all_book_items(),
+            9: lambda: library_system.library.search_for_book_item()
         }
         # Print user's options
         print("\nWhat would you like to do?")
@@ -62,7 +64,7 @@ class Admin(Person):
         field_names = [attr for attr in dir(empty_member_object)
                        if not callable(getattr(empty_member_object, attr)) and not attr.startswith("__")]
         field_names.remove('id')
-        new_member = {'Number': empty_member_object.id}
+        new_member = {'Number': empty_member_object.national_insurance_number}
         for field_name in field_names:
             while True:
                 value = input(f"Please enter the {field_name}: ").strip()
@@ -160,11 +162,13 @@ class Admin(Person):
             return data[middle]
 
     def add_book(self):
+        from Classes.Catalog import Catalog
+        catalog = Catalog()
         new_book = Book.create_book_by_user_input()
-        books = self.library_system.catalog.get_books()
+        books = catalog.get_books()
         books.append(new_book)
         self.__update_books(books)
-        self.Catalog.books.append(new_book)
+        catalog.books.append(new_book)
 
     def __update_books(self, books):
         file_path = "Data/Books.json"

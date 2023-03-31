@@ -14,7 +14,7 @@ class Member(Person):
     ]
 
     def __init__(self, GivenName, Surname, StreetAddress, ZipCode, City,EmailAddress,Username,Password,TelephoneNumber):
-        super().__init__(Username, Password)
+        super().__init__()
         self.GivenName = GivenName
         self.Surname = Surname
         self.StreetAddress = StreetAddress
@@ -33,7 +33,7 @@ class Member(Person):
             with open(file_path) as file:
                 loan_items = json.load(file)
                 for item in loan_items:
-                    if self.id == item['borrower']:
+                    if self.national_insurance_number == item['borrower']:
                         count += 1
                 return count
         except Exception as e:
@@ -47,18 +47,20 @@ class Member(Person):
             with open(file_path) as file:
                 loan_items = json.load(file)
                 for item in loan_items:
-                    if self.id == item['borrower']:
+                    if self.national_insurance_number == item['borrower']:
                         loan_items_for_member.append(item)
                 return loan_items_for_member
         except Exception as e:
             return None
 
     def show_interface(self):
+        from Classes.LibrarySystem import LibrarySystem
+        library_system = LibrarySystem()
         switcher = {
-            1: lambda: self.library_system.catalog.print_all_books(),
-            2: lambda: self.library_system.catalog.search_for_book(),
-            3: lambda: self.library_system.library.print_all_book_items(),
-            4: lambda: self.library_system.library.search_for_book_item(),
+            1: lambda: library_system.catalog.print_all_books(),
+            2: lambda: library_system.catalog.search_for_book(),
+            3: lambda: library_system.library.print_all_book_items(),
+            4: lambda: library_system.library.search_for_book_item(),
             5: lambda: self.borrow_book_item(),
             6: lambda: self.return_book_item()
         }
@@ -101,7 +103,7 @@ class Member(Person):
         if borrowed_books > 0:
             loan_item = self.__get_loan_item_to_return_by_user_input()
             book_item_to_return = loan_item['book_item']
-            self.library_system.return_book_item(book_item_to_return, self.id)
+            self.library_system.return_book_item(book_item_to_return, self.national_insurance_number)
         else:
             print("There is no book to return.")
 
