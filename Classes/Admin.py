@@ -190,20 +190,37 @@ class Admin(Person):
         member = self.__convert_member_from_dict_to_instance(self.get_member_by_identity_input())
         # Get the member's borrowed books
         borrowed_books = member.borrowed_books
-        # Show book item status foreach borrowed book
-        print("The member is borrowing these books:")
-        for loan_item in borrowed_books:
-            book_details = f"'{loan_item['book_item']['book']['title']}' by {loan_item['book_item']['book']['author']}"
-            print("    " + book_details)
-            if loan_item['return_date'] is not None:
-                status = "returned"
-            else:
-                status = "not returned yet"
-            loan_details = f"Loan date: {loan_item['loan_date']}\n    Status: {status}"
-            print("    " + loan_details + "\n")
+        if borrowed_books is not None and len(borrowed_books) > 0:
+            # Show book item status foreach borrowed book
+            print("The member is borrowing these books:")
+            for loan_item in borrowed_books:
+                book_details = f"'{loan_item['book_item']['book']['title']}' by {loan_item['book_item']['book']['author']}"
+                print("    " + book_details)
+                if loan_item['return_date'] is not None:
+                    status = "returned"
+                else:
+                    status = "not returned yet"
+                loan_details = f"Loan date: {loan_item['loan_date']}\n    Status: {status}"
+                print("    " + loan_details + "\n")
+        else:
+            print("    The member is currently not borrowing any books.")
 
     def __convert_member_from_dict_to_instance(self, member_dict):
         member_national_insurance_number = member_dict.pop('Number')
         member_instance = Member(**member_dict)
         member_instance.national_insurance_number = member_national_insurance_number
         return member_instance
+
+    def lend_book_item_to_member(self):
+        from Classes.LoanItem import LoanItem
+        # Get user to loan with
+        print("Choose the member:")
+        get_member = self.get_member_by_identity_input()
+        member = self.__convert_member_from_dict_to_instance(get_member)
+        # Choose book item and loan it
+        print("Choose the book to lend:")
+        loan_item = member.borrow_book_item(True)
+        if isinstance(loan_item, LoanItem):
+            # Workaround to appropriately update the data files
+            book_item_list_index = self.library.get_book_item_index_by_book_id(loan_item.book_item['book']['ISBN'])
+            self.library.book_items[book_item_list_index]['copies'] -= 1

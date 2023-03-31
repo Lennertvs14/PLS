@@ -63,7 +63,7 @@ class Member(Person):
             print("Invalid input, please try again.")
             return self.show_interface()
 
-    def borrow_book_item(self):
+    def borrow_book_item(self, return_the_loan_item=False):
         from Classes.LoanItem import LoanItem
         borrowed_books = self.borrowed_books
         max_amount_of_books_to_have = 3
@@ -85,6 +85,8 @@ class Member(Person):
             print(f"We expect you to return it before {loan_item.due_date}.")
         else:
             print("You are not allowed to borrow more than 3 books, simultaneously.")
+        if return_the_loan_item is True:
+            return loan_item
 
     def user_already_borrows_book_item(self, book_item):
         for loan_item in self.borrowed_books:
