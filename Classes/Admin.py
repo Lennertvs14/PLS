@@ -39,23 +39,17 @@ class Admin(Person):
             3: lambda: self.edit_member(),
             4: lambda: self.delete_member(),
             5: lambda: self.check_book_item_status_for_member(),
-            # TODO: add_list_of_members()
-            6: lambda: print("Not implemented yet."),
+            6: lambda: self.add_list_of_members(),
             7: lambda: self.check_catalog(),
             8: lambda: self.add_book(),
-            # TODO: edit_book()
-            9: lambda: print("Not implemented yet."),
-            # TODO: delete_book()
-            10: lambda: print("Not implemented yet."),
+            9: lambda: self.edit_book(),
+            10: lambda: self.delete_book(),
             11: lambda: self.search_for_book(),
-            # TODO: add_list_of_books()
-            12: lambda: print("Not implemented yet."),
+            12: lambda: self.add_list_of_books(),
             13: lambda: self.check_library(),
             14: lambda: self.add_book_item(),
-            # TODO: edit_book_item()
-            15: lambda: print("Not implemented yet."),
-            # TODO: delete_book_item()
-            16: lambda: print("Not implemented yet."),
+            15: lambda: self.edit_book_item(),
+            16: lambda: self.delete_book_item(),
             17: lambda: self.search_for_book_item(),
             18: lambda: self.lend_book_item_to_member(),
             # TODO: Backup.make_backup()
@@ -176,12 +170,42 @@ class Admin(Person):
         else:
             return data[middle]
 
+    def add_list_of_members(self):
+        """This method will load and add a list of members to the system, all at once using a csv file."""
+        # TODO: 1. Get the csv file with members
+        # TODO: 2. Don't import members if they already exist (in our json file), compare by the unique identifier: username
+        # TODO: 3. Test your implementation
+        # TODO: 4. Import a couple of members, then run option 1 (explore members) and validate if they're visible.
+        print("Not implemented yet.")
+
     def add_book(self):
         new_book = Book.create_book_by_user_input()
         books = self.catalog.get_books()
         books.append(new_book)
         self.catalog.books.append(new_book)
         self.update_data("Data/Books.json", books)
+
+    def edit_book(self):
+        # TODO: 1. Check the edit member function
+        # TODO: 2. Keep DRY-principles in mind, because your delete_book will also require user input for choosing a book
+        # TODO: 3. Make the member editable
+        # TODO: 4. Test your solution
+        print("Not implemented yet.")
+
+    def delete_book(self):
+        # TODO: 1. Check the delete member function
+        # TODO: 2. Keep DRY-principles in mind, because your edit_book will also require user input for choosing a book
+        # TODO: 3. Remove a member
+        # TODO: 4. Test your solution
+        print("Not implemented yet.")
+
+    def add_list_of_books(self):
+        """This method will load and add a list of members to the system, all at once using a json file."""
+        # TODO: 1. Get the json file with books
+        # TODO: 2. Don't import books if they already exist (in our json file), compare by the unique identifier: ISBN
+        # TODO: 3. Test your implementation
+        # TODO: 4. Import a couple of books, then run option 7 (explore catalog) and validate if they're visible.
+        print("Not implemented yet.")
 
     def add_book_item(self):
         self.check_catalog()
@@ -201,6 +225,19 @@ class Admin(Person):
             print("Invalid input, please try again.\n")
             return self.add_book_item()
 
+    def edit_book_item(self):
+        # TODO: 1. Check the edit member function or edit book function if it already exist
+        # TODO: 2. Keep DRY-principles in mind, because your delete_book_item will also require user input for choosing a book_item
+        # TODO: 3. Make the book_item editable
+        # TODO: 4. Test your solution
+        print("Not implemented yet.")
+
+    def delete_book_item(self):
+        # TODO: 1. Check the delete member function or delete book function if it already exist
+        # TODO: 2. Keep DRY-principles in mind, because your edit_book_item will also require user input for choosing a book_item
+        # TODO: 3. Remove the book item
+        # TODO: 4. Test your solution
+        print("Not implemented yet.")
 
     def check_book_item_status_for_member(self):
         # Get member to check for
