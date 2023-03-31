@@ -1,35 +1,41 @@
-import json
-from Classes.Catalog import Catalog
 from Classes.BookItem import BookItem
+import json
 
 
 class Library:
     def __init__(self):
-        self.catalog = Catalog()
         self.book_items = []
-        self.get_book_items()
+        self.__initialize_book_items()
 
-    def get_book_items(self):
-        """ This method retrieves book items from a JSON file if it is not empty.
-        Otherwise, it initializes book items based on the books in the library's catalog."""
-        file_path = "Data/BookItems.json"
+    def __initialize_book_items(self):
+        """
+        This method retrieves book items from a JSON file if it is not empty.
+        Otherwise, it initializes book items based on the books in the library's catalog.
+        """
+        from Classes.Catalog import Catalog
         book_items = []
         try:
-            with open(file_path) as file:
-                book_items = json.load(file)
-                self.book_items.extend(book_items)
+            book_items = self.get_book_items()
+            self.book_items.extend(book_items)
         except Exception as e:
-            books = self.catalog.get_books()
+            catalog = Catalog()
+            books = catalog.books
             for book in books:
                 book_item = BookItem(book['ISBN'], book).__dict__
                 book_items.append(book_item)
             self.update_book_items(book_items)
         self.book_items = book_items
 
-    def update_book_items(self, book_items):
+    def get_book_items(self):
+        file_path = "Data/BookItems.json"
+        with open(file_path) as file:
+            loan_items = json.load(file)
+        return loan_items
+
+    def update_book_items(self, book_items_dict):
         file_path = "Data/BookItems.json"
         with open(file_path, 'w') as file:
-            json.dump(book_items, file, indent=2)
+            json.dump(book_items_dict, file, indent=2)
 
     def get_book_item_by_user_input(self):
         sorted_book_items = self.print_all_book_items(should_sort=True, only_available_items=True)
@@ -60,11 +66,11 @@ class Library:
         if should_sort:
             return book_items
 
-    def get_book_item_index_by_ISBN(self, ISBN):
+    def get_book_item_index_by_book_id(self, international_standard_book_number):
         index = -1
         book_items = self.book_items
         for i in range(len(book_items)):
-            if book_items[i]['book']['ISBN'] == ISBN:
+            if book_items[i]['book']['ISBN'] == international_standard_book_number:
                 index = i
                 break
         return index

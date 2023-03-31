@@ -75,7 +75,7 @@ class Member(Person):
                     return
             loan_item = LoanItem(self, book_item_to_loan)
             # Update the library's book items.
-            book_item_list_index = self.library.get_book_item_index_by_ISBN(book_item_to_loan['book']['ISBN'])
+            book_item_list_index = self.library.get_book_item_index_by_book_id(book_item_to_loan['book']['ISBN'])
             self.library.book_items[book_item_list_index]['copies'] -= 1
             # Update the corresponding json data storage file.
             self.update_data("Data/BookItems.json", self.library.book_items)
@@ -98,7 +98,7 @@ class Member(Person):
             loan_item = self.__get_loan_item_to_return_by_user_input()
             book_item_to_return = loan_item['book_item']
             # Update the library's book items.
-            library_book_item_index = self.library.get_book_item_index_by_ISBN(book_item_to_return['book']['ISBN'])
+            library_book_item_index = self.library.get_book_item_index_by_book_id(book_item_to_return['book']['ISBN'])
             if library_book_item_index != -1:
                 self.library.book_items[library_book_item_index]['copies'] += 1
                 self.library.update_book_items(self.library.book_items)
