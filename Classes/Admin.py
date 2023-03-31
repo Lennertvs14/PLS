@@ -51,8 +51,7 @@ class Admin(Person):
             # TODO: add_list_of_books()
             12: lambda: print("Not implemented yet."),
             13: lambda: self.check_library(),
-            # TODO: add_book_item()
-            14: lambda: print("Not implemented yet."),
+            14: lambda: self.add_book_item(),
             # TODO: edit_book_item()
             15: lambda: print("Not implemented yet."),
             # TODO: delete_book_item()
@@ -62,7 +61,7 @@ class Admin(Person):
             # TODO: Backup.make_backup()
             19: lambda: print("Not implemented yet."),
             # TODO: Backup.restore_backup()
-            19: lambda: print("Not implemented yet.")
+            20: lambda: print("Not implemented yet.")
         }
         # Print user's options
         print("\nWhat would you like to do?")
@@ -183,6 +182,25 @@ class Admin(Person):
         books.append(new_book)
         self.catalog.books.append(new_book)
         self.update_data("Data/Books.json", books)
+
+    def add_book_item(self):
+        self.check_catalog()
+        book_item_id = input("Enter a digit for the book item you'd like to add: ").strip()
+        quantity_to_add = input("Enter a digit for the amount of book items you'd like to add: ").strip()
+        book_item_id_is_valid = book_item_id.isdigit() and -1 < int(book_item_id) <= len(self.library.book_items)
+        if book_item_id_is_valid and quantity_to_add.isdigit():
+            book_item = self.library.book_items[int(book_item_id) - 1]
+            old_quantity = book_item['copies']
+            book_item['copies'] += int(quantity_to_add)
+            self.update_data("Data/BookItems.json", self.library.book_items)
+            book_details = f"'{book_item['book']['title']}' by {book_item['book']['author']}"
+            print(f"Done!"
+                  f"\nThere used to be {old_quantity} paper copies, "
+                  f"but there are now {book_item['copies']} paper copies available for {book_details}.")
+        else:
+            print("Invalid input, please try again.\n")
+            return self.add_book_item()
+
 
     def check_book_item_status_for_member(self):
         # Get member to check for
