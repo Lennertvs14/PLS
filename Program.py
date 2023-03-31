@@ -34,7 +34,7 @@ def login():
             if members[i]['Username'] == username and members[i]['Password'] == password:
                 return members[i]
         attempts -= 1
-        print(f"You have {attempts} attempts left.")
+        print(f"You have {attempts} attempt(s) left.")
     return None
 
 

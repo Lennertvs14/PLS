@@ -31,6 +31,9 @@ class LoanItem:
             raise ValueError("There's no valid book item to loan.")
 
     def is_overdue(self):
-        due_date = datetime.strptime(self.due_date, "%Y-%m-%d")
-        return datetime.now() > due_date
+        if self.return_date is not None:
+            return True
+        else:
+            due_date = datetime.strptime(self.due_date, "%Y-%m-%d")
+            return datetime.now() > due_date
 

@@ -183,3 +183,27 @@ class Admin(Person):
         books.append(new_book)
         self.catalog.books.append(new_book)
         self.update_data("Data/Books.json", books)
+
+    def check_book_item_status_for_member(self):
+        # Get member to check for
+        print("Choose the member:")
+        member = self.__convert_member_from_dict_to_instance(self.get_member_by_identity_input())
+        # Get the member's borrowed books
+        borrowed_books = member.borrowed_books
+        # Show book item status foreach borrowed book
+        print("The member is borrowing these books:")
+        for loan_item in borrowed_books:
+            book_details = f"'{loan_item['book_item']['book']['title']}' by {loan_item['book_item']['book']['author']}"
+            print("    " + book_details)
+            if loan_item['return_date'] is not None:
+                status = "returned"
+            else:
+                status = "not returned yet"
+            loan_details = f"Loan date: {loan_item['loan_date']}\n    Status: {status}"
+            print("    " + loan_details + "\n")
+
+    def __convert_member_from_dict_to_instance(self, member_dict):
+        member_national_insurance_number = member_dict.pop('Number')
+        member_instance = Member(**member_dict)
+        member_instance.national_insurance_number = member_national_insurance_number
+        return member_instance
