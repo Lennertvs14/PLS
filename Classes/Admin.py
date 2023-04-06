@@ -52,8 +52,7 @@ class Admin(Person):
             16: lambda: self.delete_book_item(),
             17: lambda: self.search_for_book_item(),
             18: lambda: self.lend_book_item_to_member(),
-            # TODO: Backup.make_backup()
-            19: lambda: print("Not implemented yet."),
+            19: lambda: self.backup(),
             # TODO: Backup.restore_backup()
             20: lambda: print("Not implemented yet.")
         }
@@ -279,3 +278,7 @@ class Admin(Person):
             # Workaround to appropriately update the data files
             book_item_list_index = self.library.get_book_item_index_by_book_id(loan_item.book_item['book']['ISBN'])
             self.library.book_items[book_item_list_index]['copies'] -= 1
+
+    def backup(self):
+        from Classes import Backup
+        initialize_backup = Backup.Backup()
