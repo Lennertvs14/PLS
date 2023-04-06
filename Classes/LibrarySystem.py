@@ -4,6 +4,7 @@ import json
 
 
 class LibrarySystem:
+    # TODO: Library system should hold a list of loan items as well, for the generic logic and class diagram.
     def __init__(self):
         self.library = Library()
         self.catalog = Catalog()

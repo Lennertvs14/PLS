@@ -185,6 +185,7 @@ class Admin(Person):
         self.catalog.books.append(new_book)
         self.update_data("Data/Books.json", books)
 
+    # TODO: Use the member's static validation methods.
     def edit_book(self):
         book_to_edit = self.__get_book_by_user_input()
         books = self.catalog.books
