@@ -5,15 +5,15 @@ from Classes.Person import Person
 
 class Admin(Person):
     admin_options = [
-        "Explore members",
-        "Add member",
-        "Edit member",
-        "Delete member",
-        "Check book item status for member",
-        "Add list of members",
-        "Explore catalog",
-        "Add book",
-        "Edit book",
+        " Explore members",
+        " Add member",
+        " Edit member",
+        " Delete member",
+        " Check book item status for member",
+        " Add list of members",
+        " Explore catalog",
+        " Add book",
+        " Edit book",
         "Delete book",
         "Search catalog",
         "Add list of books",
@@ -55,7 +55,8 @@ class Admin(Person):
             # TODO: Backup.make_backup()
             19: lambda: print("Not implemented yet."),
             # TODO: Backup.restore_backup()
-            20: lambda: print("Not implemented yet.")
+            20: lambda: print("Not implemented yet."),
+            21: lambda: exit()
         }
         # Print user's options
         print("\nWhat would you like to do?")
@@ -180,24 +181,46 @@ class Admin(Person):
 
     def add_book(self):
         new_book = Book.create_book_by_user_input()
-        books = self.catalog.get_books()
+        books = self.catalog.books
         books.append(new_book)
         self.catalog.books.append(new_book)
         self.update_data("Data/Books.json", books)
 
     def edit_book(self):
-        # TODO: 1. Check the edit member function
-        # TODO: 2. Keep DRY-principles in mind, because your delete_book will also require user input for choosing a book
-        # TODO: 3. Make the member editable
-        # TODO: 4. Test your solution
-        print("Not implemented yet.")
+        book_to_edit = input("Enter the title of the book you want to edit: ")
+        books = self.catalog.books
+        for book in books:
+            if book["title"] == book_to_edit or book["author"] == book_to_edit:
+                for key in book:
+                    print(f"\nWould you like to edit the {key}?")
+                    yes_or_no = input("Enter 1, 2 or 3 to choose:\n [1] Yes\n [2] No\n [3] Exit\n-> ").strip()
+                    if yes_or_no == "1":
+                        value = input(f"Please enter the {key}: ")
+                        if value != "" :
+                            book[key] = value
+                        else:
+                            print("Invalid input.")
+                    if yes_or_no == "3":
+                        break
+                    
+                print(f"\n{book_to_edit}")
+
+                self.update_data("Data/Books.json", books)
+                print("\nBook succesfully edited!")
 
     def delete_book(self):
-        # TODO: 1. Check the delete member function
-        # TODO: 2. Keep DRY-principles in mind, because your edit_book will also require user input for choosing a book
-        # TODO: 3. Remove a member
-        # TODO: 4. Test your solution
-        print("Not implemented yet.")
+        book_to_delete = input("Enter the title or author of the book you want to remove: ")
+        books = self.catalog.books
+        found_book = False
+        for book in books:
+            if book["title"] == book_to_delete or book["author"] == book_to_delete:
+                found_book = True
+                books.remove(book)
+                self.update_data("Data/Books.json", books)
+                print(book["title"], "from", book["author"],"has been removed from the catalog.")
+                break
+        if not found_book:
+            print(book_to_delete,"is not in the catalog. check if you entered the correct name")
 
     def add_list_of_books(self):
         """This method will load and add a list of members to the system, all at once using a json file."""
