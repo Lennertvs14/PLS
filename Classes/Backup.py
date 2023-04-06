@@ -53,7 +53,7 @@ class Backup:
         return True
 
     @staticmethod
-    def restore_backup():
+    def restore_backup(delete_backup_after=False):
         current_backups = Backup.get_data(Backup.location)
         if current_backups:
             backup_to_restore = Backup.get_backup_to_restore_by_user_input(current_backups)
@@ -63,9 +63,10 @@ class Backup:
                     file_path = os.path.join('Data', file_name + '.json')
                     with open(file_path, 'w') as file:
                         json.dump(data, file, indent=4)
-                backups = [backup for backup in current_backups if backup['name'] != backup_to_restore['name']]
-                with open(Backup.location, "w") as file:
-                    json.dump(backups, file, indent=4)
+                if delete_backup_after:
+                    backups = [backup for backup in current_backups if backup['name'] != backup_to_restore['name']]
+                    with open(Backup.location, "w") as file:
+                        json.dump(backups, file, indent=4)
                 print("Restoring the backup was successful.")
                 return True
             else:

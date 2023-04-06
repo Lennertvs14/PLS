@@ -24,7 +24,8 @@ class Admin(Person):
         "Search book item",
         "Lend book item to member",
         "Make backup",
-        "Restore backup"
+        "Restore backup",
+        "Restore and remove backup"
     ]
 
     def __init__(self):
@@ -53,7 +54,8 @@ class Admin(Person):
             17: lambda: self.search_for_book_item(),
             18: lambda: self.lend_book_item_to_member(),
             19: lambda: self.create_backup(),
-            20: lambda: self.restore_backup()
+            20: lambda: self.restore_backup(),
+            21: lambda: self.restore_backup(True)
         }
         # Print user's options
         print("\nWhat would you like to do?")
@@ -283,6 +285,6 @@ class Admin(Person):
         backup_description = str(input("Give the backup a description or leave it empty: "))
         create_backup = Backup(backup_description)
 
-    def restore_backup(self):
+    def restore_backup(self, delete_backup_after=False):
         from Classes.Backup import Backup
-        Backup.restore_backup()
+        Backup.restore_backup(delete_backup_after)
