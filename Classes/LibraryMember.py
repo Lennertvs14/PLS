@@ -3,7 +3,7 @@ import json
 import re
 
 
-class Member(Person):
+class LibraryMember(Person):
     member_options = [
         "Explore catalog",
         "Search catalog",
@@ -41,9 +41,9 @@ class Member(Person):
 
     def show_interface(self):
         switcher = {
-            1: lambda: self.check_catalog(),
+            1: lambda: self.explore_catalog(),
             2: lambda: self.search_for_book(),
-            3: lambda: self.check_library(),
+            3: lambda: self.explore_library(),
             4: lambda: self.search_for_book_item(),
             5: lambda: self.borrow_book_item(),
             6: lambda: self.return_book_item()
@@ -147,11 +147,11 @@ class Member(Person):
         if input_is_correct:
             if field_name in special_validation_fields:
                 if field_name == 'EmailAddress':
-                    return Member.validate_email(input_value)
+                    return LibraryMember.validate_email(input_value)
                 elif field_name == 'ZipCode':
-                    return Member.validate_zip_code(input_value)
+                    return LibraryMember.validate_zip_code(input_value)
                 else:
-                    return Member.validate_username(input_value)
+                    return LibraryMember.validate_username(input_value)
             else:
                 return True
         return False
@@ -169,11 +169,12 @@ class Member(Person):
     @staticmethod
     def validate_username(username):
         username_is_lowercase = username == username.lower()
-        all_usernames = Member.__get_member_usernames()
+        all_usernames = LibraryMember.__get_member_usernames()
         username_is_unique = username not in all_usernames
         if username_is_lowercase and username_is_unique:
             return True
         else:
+            print("Username must be lowercase and unique!")
             return False
 
     @staticmethod
