@@ -1,9 +1,9 @@
 from Classes.Book import Book
-from Classes.Member import Member
+from Classes.LibraryMember import LibraryMember
 from Classes.Person import Person
 
 
-class Admin(Person):
+class LibraryAdmin(Person):
     admin_options = [
         "Explore members",
         "Add member",
@@ -41,13 +41,13 @@ class Admin(Person):
             4: lambda: self.delete_member(),
             5: lambda: self.check_book_item_status_for_member(),
             6: lambda: self.add_list_of_members(),
-            7: lambda: self.check_catalog(),
+            7: lambda: self.explore_catalog(),
             8: lambda: self.add_book(),
             9: lambda: self.edit_book(),
             10: lambda: self.delete_book(),
             11: lambda: self.search_for_book(),
             12: lambda: self.add_list_of_books(),
-            13: lambda: self.check_library(),
+            13: lambda: self.explore_library(),
             14: lambda: self.add_book_item(),
             15: lambda: self.edit_book_item(),
             16: lambda: self.delete_book_item(),
@@ -80,10 +80,13 @@ class Admin(Person):
 
     @staticmethod
     def create_member_by_user_input():
-        empty_member_object = Member("", "", "", "", "", "", "", "", "")
+        empty_member_object = LibraryMember("", "", "", "", "", "", "", "", "")
         field_names = [attr for attr in dir(empty_member_object)
                        if not callable(getattr(empty_member_object, attr)) and not attr.startswith("__")]
-        field_names.remove('id')
+        fields_to_exclude = \
+            ['national_insurance_number', 'borrowed_books', 'catalog', 'library', 'loan_items', 'member_options']
+        for field in fields_to_exclude:
+            field_names.remove(field)
         new_member = {'Number': empty_member_object.national_insurance_number}
         for field_name in field_names:
             while True:
@@ -97,7 +100,7 @@ class Admin(Person):
 
     def delete_member(self):
         sorted_members = sorted(self.get_data("Data/Members.json"), key=lambda m: int(m["Number"]))
-        member_to_delete = self.get_member_by_identity_input(sorted_members, True)
+        member_to_delete = self.get_member_by_national_insurance_number(sorted_members, True)
         sorted_members.remove(member_to_delete)
         self.update_data("Data/Members.json", sorted_members)
 
@@ -109,7 +112,7 @@ class Admin(Person):
             print(f"[{member['Number']}] {member_full_name}")
 
     def edit_member(self):
-        member_to_edit = self.get_member_by_identity_input()
+        member_to_edit = self.get_member_by_national_insurance_number()
         member_to_edit_identity = member_to_edit['Number']
         member_to_edit.pop('Number')
         for key in member_to_edit:
@@ -117,7 +120,7 @@ class Admin(Person):
             yes_or_no = input("Enter 1, 2 or 3 to choose:\n [1] Yes\n [2] No\n [3] Exit\n-> ").strip()
             if yes_or_no == "1":
                 value = input(f"Please enter the {key}: ")
-                if value != "" and Member.validate_field(key, value):
+                if value != "" and LibraryMember.validate_field(key, value):
                     member_to_edit[key] = value
                 else:
                     print("Invalid input.")
@@ -132,9 +135,9 @@ class Admin(Person):
                 self.update_data("Data/Members.json", members)
                 break
 
-    def get_member_by_identity_input(self, members=None, members_are_sorted=False):
+    def get_member_by_national_insurance_number(self, members=None, members_are_sorted=False):
         """
-        Returns a member object based on their identity number.
+        Returns a member object based on their national insurance number.
 
         :param members: A list of member objects to search.
         :param members_are_sorted: A boolean flag indicating if the list is sorted.
@@ -150,23 +153,23 @@ class Admin(Person):
         try:
             member_id = int(input("Give the identity of the user you would like to move forward with: ").strip())
             if 0 < member_id <= sorted_members[-1]['Number']:
-                member = self.binary_search_for_member_by_identity(sorted_members, 0, len(sorted_members), member_id)
+                member = self.binary_search_for_member_by_national_insurance_number(sorted_members, 0, len(sorted_members), member_id)
                 return member
             else:
                 raise ValueError
         except ValueError:
             print("Invalid member identity, please try again.")
-            return self.get_member_by_identity_input(sorted_members, True)
+            return self.get_member_by_national_insurance_number(sorted_members, True)
 
-    def binary_search_for_member_by_identity(self, data, low, high, value):
+    def binary_search_for_member_by_national_insurance_number(self, data, low, high, value):
         if low > high:
             return None
         middle = (low + high) // 2
         member_id = int(data[middle]['Number'])
         if member_id > value:
-            return self.binary_search_for_member_by_identity(data, low, middle - 1, value)
+            return self.binary_search_for_member_by_national_insurance_number(data, low, middle - 1, value)
         elif member_id < value:
-            return self.binary_search_for_member_by_identity(data, middle + 1, high, value)
+            return self.binary_search_for_member_by_national_insurance_number(data, middle + 1, high, value)
         else:
             return data[middle]
 
@@ -227,7 +230,7 @@ class Admin(Person):
         print("Not implemented yet.")
 
     def add_book_item(self):
-        self.check_catalog()
+        self.explore_catalog()
         book_item_id = input("Enter a digit for the book item you'd like to add: ").strip()
         quantity_to_add = input("Enter a digit for the amount of book items you'd like to add: ").strip()
         book_item_id_is_valid = book_item_id.isdigit() and -1 < int(book_item_id) <= len(self.library.book_items)
@@ -261,7 +264,7 @@ class Admin(Person):
     def check_book_item_status_for_member(self):
         # Get member to check for
         print("Choose the member:")
-        member = self.__convert_member_from_dict_to_instance(self.get_member_by_identity_input())
+        member = self.__convert_member_from_dict_to_instance(self.get_member_by_national_insurance_number())
         # Get the member's borrowed books
         borrowed_books = member.borrowed_books
         if borrowed_books is not None and len(borrowed_books) > 0:
@@ -281,7 +284,7 @@ class Admin(Person):
 
     def __convert_member_from_dict_to_instance(self, member_dict):
         member_national_insurance_number = member_dict.pop('Number')
-        member_instance = Member(**member_dict)
+        member_instance = LibraryMember(**member_dict)
         member_instance.national_insurance_number = member_national_insurance_number
         return member_instance
 
@@ -289,7 +292,7 @@ class Admin(Person):
         from Classes.LoanItem import LoanItem
         # Get user to loan with
         print("Choose the member:")
-        get_member = self.get_member_by_identity_input()
+        get_member = self.get_member_by_national_insurance_number()
         member = self.__convert_member_from_dict_to_instance(get_member)
         # Choose book item and loan it
         print("Choose the book to lend:")
