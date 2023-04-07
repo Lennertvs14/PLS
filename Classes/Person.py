@@ -5,9 +5,20 @@ import json
 class Person(LibrarySystem):
     def __init__(self):
         super().__init__()
-        self.national_insurance_number = Person.get_new_national_insurance_number()
+        self.national_insurance_number = self.get_new_national_insurance_number()
 
-    def check_catalog(self):
+    def get_new_national_insurance_number(self):
+        member_identities = self.__get_members_national_insurance_numbers()
+        return max(member_identities) + 1
+
+    def __get_members_national_insurance_numbers(self):
+        file_path = "Data/Members.json"
+        with open(file_path) as file:
+            members = json.load(file)
+        member_identities = {obj['Number'] for obj in members}
+        return member_identities
+
+    def explore_catalog(self):
         """ This function shows all the books from the catalog."""
         self.catalog.print_all_books()
 
@@ -25,7 +36,7 @@ class Person(LibrarySystem):
         else:
             print("     No matching books found.")
 
-    def check_library(self):
+    def explore_library(self):
         """ This function shows all the book items from the library."""
         self.library.print_all_book_items()
 
@@ -41,17 +52,3 @@ class Person(LibrarySystem):
                 print(f"    [{book_item['copies']}x] {book_item['book']['title']} by {book_item['book']['author']}")
         else:
             print("    No matching book item found.")
-
-
-    @staticmethod
-    def get_new_national_insurance_number():
-        member_identities = Person.__get_members_national_insurance_numbers()
-        return max(member_identities) + 1
-
-    @staticmethod
-    def __get_members_national_insurance_numbers():
-        file_path = "Data/Members.json"
-        with open(file_path) as file:
-            members = json.load(file)
-        member_identities = {obj['Number'] for obj in members}
-        return member_identities

@@ -1,16 +1,16 @@
-from Classes.Admin import Admin
-from Classes.Member import Member
+from Classes.LibraryAdmin import LibraryAdmin
+from Classes.LibraryMember import LibraryMember
 
 
 def main():
     try:
-        if isinstance(user, Admin):
+        if isinstance(user, LibraryAdmin):
             user.show_interface()
         else:
             # Convert the user (dictionary) to a member (instance)
             if 'Number' in user:
                 user.pop('Number')
-            member = Member(**user)
+            member = LibraryMember(**user)
             member.show_interface()
         return main()
     except Exception as exception:
@@ -26,10 +26,10 @@ def login():
     while attempts > 0:
         username = input("Enter your username: ").strip()
         password = input("Enter your password: ").strip()
-        # Admin validation
+        # LibraryAdmin validation
         if username == "admin" and password == "admin123":
             return library_admin
-        # Member validation
+        # LibraryMember validation
         for i in range(len(members)):
             if members[i]['Username'] == username and members[i]['Password'] == password:
                 return members[i]
@@ -39,7 +39,7 @@ def login():
 
 
 if __name__ == "__main__":
-    library_admin = Admin()
+    library_admin = LibraryAdmin()
     user = login()
     user_is_logged_in = user is not None
     if user_is_logged_in:
