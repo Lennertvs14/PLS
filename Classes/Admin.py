@@ -174,50 +174,13 @@ class Admin(Person):
 
     def add_list_of_members(self):
         """This method will load and add a list of members to the system, all at once using a csv file."""
-        # TODO: 1. Get the csv file with members
-        file_to_import = input("What is the file location? (Data/...\n")
+
         members = self.get_data("Data/Members.json")
+        file_to_import = str(input("What is the name of the file you want to import? (make sure to put the file in the Import folder with .csv)\n"))
+        new_members = self.get_csv_data("Import/" + file_to_import)
+        members = members + new_members
 
-        #create a dictionary
-        data_dict = {}
- 
-        #Step 2
-        #open a csv file handler
-        with open(file_to_import, encoding = 'utf-8') as csv_file_handler:
-            csv_reader = csv.DictReader(csv_file_handler)
- 
-        #convert each row into a dictionary
-        #and add the converted data to the data_variable
- 
-            for rows in csv_reader:
- 
-            #assuming a column named 'No'
-            #to be the primary key
-                key = rows['Username']
-                data_dict[key] = rows
- 
-        #open a json file handler and use json.dumps
-        #method to dump the data
-        #Step 3
-        with open("Data/Members.json", 'w', encoding = 'utf-8') as json_file_handler:
-            #Step 4
-            json_file_handler.write(json.dumps(data_dict, indent = 4))
-
-        mems = self.get_csv_data(file_to_import)
-        file_members = mems.__dict__
-        for member in members:
-            for new_member in file_members:
-                
-                if member["Username"] == new_member[7]:
-                    break
-            
-            members.append(new_member)
-    
         self.update_data("Data/Members.json", members)
-        # TODO: 3. Test your implementation
-        # TODO: 4. Import a couple of members, then run option 1 (explore members) and validate if they're visible.
-        self.print_all_members()
-        print("Not implemented yet.")
 
     def add_book(self):
         new_book = Book.create_book_by_user_input()
@@ -259,12 +222,16 @@ class Admin(Person):
             return self.__get_book_by_user_input()
 
     def add_list_of_books(self):
-        """This method will load and add a list of members to the system, all at once using a json file."""
-        # TODO: 1. Get the json file with books
-        # TODO: 2. Don't import books if they already exist (in our json file), compare by the unique identifier: ISBN
-        # TODO: 3. Test your implementation
-        # TODO: 4. Import a couple of books, then run option 7 (explore catalog) and validate if they're visible.
-        print("Not implemented yet.")
+        #"""This method will load and add a list of books to the system, all at once using a json file."""
+
+        books = self.catalog.books
+        file_to_import = str(input("What is the name of the file you want to import? (make sure to put the file in the Import folder with .json)\n"))
+
+        with open(file_to_import) as file:
+            new_books = json.load(file)
+        
+        books = books + new_books
+        self.update_data("Data/Books.json", books)
 
     def add_book_item(self):
         self.check_catalog()
@@ -320,7 +287,6 @@ class Admin(Person):
         print("\nBookitem succesfully edited!")
 
     def delete_book_item(self):
-        # TODO: 1. Check the delete member function or delete book function if it already exist
         book_item_to_delete = input("Enter the title or author of the book item you want to remove: ")
         book_items = self.library.book_items
         found_book = False
