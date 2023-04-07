@@ -7,15 +7,15 @@ from Classes.Person import Person
 
 class Admin(Person):
     admin_options = [
-        " Explore members",
-        " Add member",
-        " Edit member",
-        " Delete member",
-        " Check book item status for member",
-        " Add list of members",
-        " Explore catalog",
-        " Add book",
-        " Edit book",
+        "Explore members",
+        "Add member",
+        "Edit member",
+        "Delete member",
+        "Check book item status for member",
+        "Add list of members",
+        "Explore catalog",
+        "Add book",
+        "Edit book",
         "Delete book",
         "Search catalog",
         "Add list of books",
@@ -26,7 +26,8 @@ class Admin(Person):
         "Search book item",
         "Lend book item to member",
         "Make backup",
-        "Restore backup"
+        "Restore backup",
+        "Restore and remove backup"
     ]
 
     def __init__(self):
@@ -54,11 +55,9 @@ class Admin(Person):
             16: lambda: self.delete_book_item(),
             17: lambda: self.search_for_book_item(),
             18: lambda: self.lend_book_item_to_member(),
-            # TODO: Backup.make_backup()
-            19: lambda: print("Not implemented yet."),
-            # TODO: Backup.restore_backup()
-            20: lambda: print("Not implemented yet."),
-            21: lambda: exit()
+            19: lambda: self.create_backup(),
+            20: lambda: self.restore_backup(),
+            21: lambda: self.restore_backup(True)
         }
         # Print user's options
         print("\nWhat would you like to do?")
@@ -228,40 +227,36 @@ class Admin(Person):
         self.update_data("Data/Books.json", books)
 
     def edit_book(self):
-        book_to_edit = input("Enter the title of the book you want to edit: ")
+        book_to_edit = self.__get_book_by_user_input()
         books = self.catalog.books
-        for book in books:
-            if book["title"] == book_to_edit or book["author"] == book_to_edit:
-                for key in book:
-                    print(f"\nWould you like to edit the {key}?")
-                    yes_or_no = input("Enter 1, 2 or 3 to choose:\n [1] Yes\n [2] No\n [3] Exit\n-> ").strip()
-                    if yes_or_no == "1":
-                        value = input(f"Please enter the {key}: ")
-                        if value != "" :
-                            book[key] = value
-                        else:
-                            print("Invalid input.")
-                    if yes_or_no == "3":
-                        break
-                    
-                print(f"\n{book_to_edit}")
-
-                self.update_data("Data/Books.json", books)
-                print("\nBook succesfully edited!")
+        for key in book_to_edit:
+            print(f"\nWould you like to edit the {key}?")
+            yes_or_no = input("Enter 1, 2 or 3 to choose:\n [1] Yes\n [2] No\n [3] Exit\n-> ").strip()
+            if yes_or_no == "1":
+                value = input(f"Please enter the {key}: ").strip()
+                book_to_edit[key] = value
+            if yes_or_no == "3":
+                break
+        print(f"\n{book_to_edit}")
+        self.update_data("Data/Books.json", books)
+        print("\nBook successfully edited!")
 
     def delete_book(self):
-        book_to_delete = input("Enter the title or author of the book you want to remove: ")
+        book_to_delete = self.__get_book_by_user_input()
         books = self.catalog.books
-        found_book = False
-        for book in books:
-            if book["title"] == book_to_delete or book["author"] == book_to_delete:
-                found_book = True
-                books.remove(book)
-                self.update_data("Data/Books.json", books)
-                print(book["title"], "from", book["author"],"has been removed from the catalog.")
-                break
-        if not found_book:
-            print(book_to_delete,"is not in the catalog. check if you entered the correct name")
+        books.remove(book_to_delete)
+        self.update_data("Data/Books.json", books)
+        print(book_to_delete["title"], "from", book_to_delete["author"], "has been removed from the catalog.")
+
+    def __get_book_by_user_input(self):
+        print("Available books:\n")
+        self.catalog.print_all_books()
+        user_input = input("\nEnter a digit of the book you would like to move forward with: ").strip()
+        if user_input.isdigit() and 0 < int(user_input) <= len(self.catalog.books):
+            return self.catalog.books[int(user_input)-1]
+        else:
+            print("Invalid input, please try again.\n")
+            return self.__get_book_by_user_input()
 
     def add_list_of_books(self):
         """This method will load and add a list of members to the system, all at once using a json file."""
@@ -385,3 +380,12 @@ class Admin(Person):
             # Workaround to appropriately update the data files
             book_item_list_index = self.library.get_book_item_index_by_book_id(loan_item.book_item['book']['ISBN'])
             self.library.book_items[book_item_list_index]['copies'] -= 1
+
+    def create_backup(self):
+        from Classes.Backup import Backup
+        backup_description = str(input("Give the backup a description or leave it empty: "))
+        create_backup = Backup(backup_description)
+
+    def restore_backup(self, delete_backup_after=False):
+        from Classes.Backup import Backup
+        Backup.restore_backup(delete_backup_after)
