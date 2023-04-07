@@ -1,3 +1,5 @@
+import csv
+import json
 from Classes.Book import Book
 from Classes.Member import Member
 from Classes.Person import Person
@@ -174,9 +176,48 @@ class Admin(Person):
     def add_list_of_members(self):
         """This method will load and add a list of members to the system, all at once using a csv file."""
         # TODO: 1. Get the csv file with members
-        # TODO: 2. Don't import members if they already exist (in our json file), compare by the unique identifier: username
+        file_to_import = input("What is the file location? (Data/...\n")
+        members = self.get_data("Data/Members.json")
+
+        #create a dictionary
+        data_dict = {}
+ 
+        #Step 2
+        #open a csv file handler
+        with open(file_to_import, encoding = 'utf-8') as csv_file_handler:
+            csv_reader = csv.DictReader(csv_file_handler)
+ 
+        #convert each row into a dictionary
+        #and add the converted data to the data_variable
+ 
+            for rows in csv_reader:
+ 
+            #assuming a column named 'No'
+            #to be the primary key
+                key = rows['Username']
+                data_dict[key] = rows
+ 
+        #open a json file handler and use json.dumps
+        #method to dump the data
+        #Step 3
+        with open("Data/Members.json", 'w', encoding = 'utf-8') as json_file_handler:
+            #Step 4
+            json_file_handler.write(json.dumps(data_dict, indent = 4))
+
+        mems = self.get_csv_data(file_to_import)
+        file_members = mems.__dict__
+        for member in members:
+            for new_member in file_members:
+                
+                if member["Username"] == new_member[7]:
+                    break
+            
+            members.append(new_member)
+    
+        self.update_data("Data/Members.json", members)
         # TODO: 3. Test your implementation
         # TODO: 4. Import a couple of members, then run option 1 (explore members) and validate if they're visible.
+        self.print_all_members()
         print("Not implemented yet.")
 
     def add_book(self):
@@ -249,18 +290,60 @@ class Admin(Person):
             return self.add_book_item()
 
     def edit_book_item(self):
-        # TODO: 1. Check the edit member function or edit book function if it already exist
-        # TODO: 2. Keep DRY-principles in mind, because your delete_book_item will also require user input for choosing a book_item
-        # TODO: 3. Make the book_item editable
-        # TODO: 4. Test your solution
-        print("Not implemented yet.")
+        book_item_to_edit = input("Enter the title of the book item you want to edit: ")
+        book_items = self.library.book_items
+        for book_item in book_items:
+            if book_item['book']["title"] == book_item_to_edit or book_item['book']["author"] == book_item_to_edit:
+                for key in book_item:
+                    print(f"\nWould you like to edit the {key}?")
+                    yes_or_no = input("Enter 1, 2 or 3 to choose:\n [1] Yes\n [2] No\n [3] Exit\n-> ").strip()
+                    if yes_or_no == "1":
+                        if key == 'book':
+                            for book_detail in book_item['book']:
+                                print(f"\nWould you like to edit the {book_detail}?")
+                                yes_or_no = input("Enter 1, 2 or 3 to choose:\n [1] Yes\n [2] No\n [3] Exit\n-> ").strip()
+                                if yes_or_no == "1":
+                                    value = input(f"Please enter the {book_detail}: ")
+                                    if value != "" :
+                                        book_item['book'][book_detail] = value
+                                    else:
+                                        print("Invalid input.")
+                                if yes_or_no == "3":
+                                    break
+                        else:
+                            value = input(f"Please enter the {key}: ")
+                            if value != "" :
+                                book_item[key] = value
+                            else:
+                                print("Invalid input.")
+                    if yes_or_no == "3":
+                        break
+                    
+                print(f"\n{book_item_to_edit}")
+
+        self.update_data("Data/BookItems.json", book_items)
+        print("\nBookitem succesfully edited!")
 
     def delete_book_item(self):
         # TODO: 1. Check the delete member function or delete book function if it already exist
-        # TODO: 2. Keep DRY-principles in mind, because your edit_book_item will also require user input for choosing a book_item
-        # TODO: 3. Remove the book item
-        # TODO: 4. Test your solution
-        print("Not implemented yet.")
+        book_item_to_delete = input("Enter the title or author of the book item you want to remove: ")
+        book_items = self.library.book_items
+        found_book = False
+        for book_item in book_items:
+            if not found_book:
+                if book_item["book"]["title"] == book_item_to_delete or book_item["book"]["author"] == book_item_to_delete:
+                    found_book = True
+                    if book_item["copies"] > 0:
+                        book_item["copies"] -= 1
+                        print(f"Succesfully deleted a copy of {book_item['book']['title']} by {book_item['book']['author']}")
+                    if book_item["copies"] == 0:
+                        print(f"There are no copies left of {book_item['book']['title']} by {book_item['book']['author']}")
+                    self.update_data("Data/BookItems.json", book_items)
+                    break
+        if not found_book:
+            print(book_item_to_delete,"is not in the catalog. check if you entered the correct name! (case sensitive)\n")
+            return self.delete_book_item()
+        
 
     def check_book_item_status_for_member(self):
         # Get member to check for
