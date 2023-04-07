@@ -120,7 +120,7 @@ class LibraryAdmin(Person):
             yes_or_no = input("Enter 1, 2 or 3 to choose:\n [1] Yes\n [2] No\n [3] Exit\n-> ").strip()
             if yes_or_no == "1":
                 value = input(f"Please enter the {key}: ")
-                if value != "" and LibraryMember.validate_field(key, value):
+                if LibraryMember.validate_field(key, value):
                     member_to_edit[key] = value
                 else:
                     print("Invalid input.")
