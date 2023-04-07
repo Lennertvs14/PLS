@@ -34,13 +34,11 @@ class Book:
 
     @staticmethod
     def validate_field(field_name, input_value):
-        special_validation_fields = ['ISBN', 'link']
+        special_validation_fields = ['ISBN']
         integer_validation_fields = ['pages', 'year']
         if field_name in special_validation_fields:
             if field_name == 'ISBN':
                 return Book.validate_isbn_13(input_value)
-            else:
-                return Book.validate_link(input_value)
         elif field_name in integer_validation_fields:
             return input_value.isdigit()
         else:
@@ -61,14 +59,5 @@ class Book:
         checksum = checksum % 10 if checksum < 10 else 0
         # Compare the calculated checksum with the last digit of the ISBN
         return checksum == digits[-1]
-
-    @staticmethod
-    def validate_link(url):
-        url_pattern = re.compile(r"^(?:http|ftp)s?://"
-                                 # domain name
-                                 r"(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+"
-                                 # top-level domain
-                                 r"(?:[a-zA-Z]{2,})(?:/?|[/?]\S+)$")
-        return url_pattern.match(url)
 
 

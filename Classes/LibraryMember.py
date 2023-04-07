@@ -105,7 +105,7 @@ class LibraryMember(Person):
                 self.library.book_items[library_book_item_index]['copies'] += 1
                 self.library.update_book_items(self.library.book_items)
                 # Update the loan items' data storage file.
-                loan_items = self.get_data("Data/LoanItems.json")
+                loan_items = self.loan_items
                 for loan_item in loan_items:
                     members_are_equal = str(loan_item['borrower']) == str(self.national_insurance_number)
                     international_standard_book_numbers_are_equal = \

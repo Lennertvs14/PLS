@@ -183,10 +183,20 @@ class LibraryAdmin(Person):
 
     def add_book(self):
         new_book = Book.create_book_by_user_input()
-        books = self.catalog.books
-        books.append(new_book)
-        self.catalog.books.append(new_book)
-        self.update_data("Data/Books.json", books)
+        book_is_unique = True
+        duplicate_book = None
+        for book in self.catalog.books:
+            if new_book['ISBN'] == book['ISBN']:
+                book_is_unique = False
+                duplicate_book = book
+        if book_is_unique:
+            books = self.catalog.books
+            books.append(new_book)
+            self.catalog.books.append(new_book)
+            self.update_data("Data/Books.json", books)
+        else:
+            print(f"\nThis book is not unique, the ISBN already exist:\n    {duplicate_book}\nPlease try again.\n")
+            return self.add_book()
 
     # TODO: Use the member's static validation methods.
     def edit_book(self):
