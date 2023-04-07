@@ -7,12 +7,8 @@ class LoanItem:
         self.borrower = member.national_insurance_number
         self.book_item = book_item
         self.loan_date = datetime.now().strftime("%Y-%m-%d")
-        self.return_date = None
+        self.return_date = datetime.strptime(self.loan_date, "%Y-%m-%d") + timedelta(days=60).strftime("%Y-%m-%d")
         self.store_loan_item()
-
-    @property
-    def due_date(self):
-        return (datetime.strptime(self.loan_date, "%Y-%m-%d") + timedelta(days=60)).strftime("%Y-%m-%d")
 
     def store_loan_item(self):
         if self.book_item is not None:
@@ -31,9 +27,6 @@ class LoanItem:
             raise ValueError("There's no valid book item to loan.")
 
     def is_overdue(self):
-        if self.return_date is not None:
-            return True
-        else:
-            due_date = datetime.strptime(self.due_date, "%Y-%m-%d")
-            return datetime.now() > due_date
+        due_date = datetime.strptime(self.return_date, "%Y-%m-%d")
+        return datetime.now() > due_date
 
