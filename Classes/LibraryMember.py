@@ -82,7 +82,7 @@ class LibraryMember(Person):
             # Give user a success notification.
             print(f"You successfully loaned '{book_item_to_loan['book']['title']}' "
                   f"by {book_item_to_loan['book']['author']}.")
-            print(f"We expect you to return it before {loan_item.due_date}.")
+            print(f"We expect you to return it before {loan_item.return_date}.")
         else:
             print("You are not allowed to borrow more than 3 books, simultaneously.")
         if return_the_loan_item is True:

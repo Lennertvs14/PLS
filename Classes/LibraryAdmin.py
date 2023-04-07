@@ -262,6 +262,8 @@ class LibraryAdmin(Person):
         print("Not implemented yet.")
 
     def check_book_item_status_for_member(self):
+        from Classes.LoanItem import LoanItem
+        from datetime import datetime
         # Get member to check for
         print("Choose the member:")
         member = self.__convert_member_from_dict_to_instance(self.get_member_by_national_insurance_number())
@@ -273,11 +275,14 @@ class LibraryAdmin(Person):
             for loan_item in borrowed_books:
                 book_details = f"'{loan_item['book_item']['book']['title']}' by {loan_item['book_item']['book']['author']}"
                 print("    " + book_details)
-                if loan_item['return_date'] is not None:
-                    status = "returned"
+                if LoanItem.is_overdue(loan_item['return_date']):
+                    days_left_to_return = 0
                 else:
-                    status = "not returned yet"
-                loan_details = f"Loan date: {loan_item['loan_date']}\n    Status: {status}"
+                    days_left_to_return = (datetime.strptime(loan_item['return_date'], "%Y-%m-%d") - datetime.now()).days
+                status = "not returned yet"
+                loan_details = f"Loan date: {loan_item['loan_date']}" \
+                               f"\n    Status: {status}" \
+                               f"\n    Days left: {days_left_to_return}"
                 print("    " + loan_details + "\n")
         else:
             print("    The member is currently not borrowing any books.")
