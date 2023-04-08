@@ -222,7 +222,7 @@ class Admin(Person):
             return self.__get_book_by_user_input()
 
     def add_list_of_books(self):
-        #"""This method will load and add a list of books to the system, all at once using a json file."""
+        """This method will load and add a list of books to the system, all at once using a json file."""
 
         books = self.catalog.books
         file_to_import = str(input("What is the name of the file you want to import? (make sure to put the file in the Import folder with .json)\n"))

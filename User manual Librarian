@@ -129,12 +129,17 @@ Enter 1, 2 or 3 to choose:
 if you select Yes, it asks you the give the information you would to edit it into. If you select No, it will continue to the next detail.
 
 16 - Delete a book item from the database. It will ask you to enter the title or author of the book you would like to move remove a copy from. After entering the title or author and hitting enter,(if found) it will delete a copy of that book (1 book item).
+
 17 - If you would like to search for a specific book item, you can use this function to search for your book item by title or by author and see how many copies are left in the library. (not case sensitive)
+
 18 - Lend a book item to a member. It will ask you to give a the id of the member from the list you would like to move forward with. After that, it will ask you to enter the id of the book item from the list you would like to lend out. If it all went succesfully you would see a message like:
 ------------------------------------------------------
 You successfully loaned 'Hunger' by Knut Hamsun to Enno Wemmers.
 We expect you to return it before 2023-06-07.
 ------------------------------------------------------
-19 -  
-20 -  
-21 -  
+
+BACKUPS
+
+19 -  Make a backup. A backup will save all data on the database at specific point in time. It will ask you to name the backup or leave it empty if you want return to your home screen. If you did enter a name, a backup with that name will be created and put into the Backup folder.
+20 -  Restore backup. If you need to restore the data to an older version of the data, you can use this function to restore the data of a backup into the system. If no backups are stored, it will tell you "There are no backups found to restore.". Otherwise you need to put in the name of the backup that you would like to restore. After entering the correct name, the data should be updated to the data from the backup.
+21 - Restore and remove backup. If you need to restore the data to an older version of the data and delete the contents afterwards, you can use this function to restore the data of a backup into the system. If no backups are stored, it will tell you "There are no backups found to restore.". Otherwise you need to put in the name of the backup that you would like to restore. After entering the correct name, the data should be updated to the data from the backup and the backup should not exist anymore.

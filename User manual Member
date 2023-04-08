@@ -23,10 +23,15 @@ What would you like to do?
  [5] Loan book item
  [6] Return book item
 ---------------------------------------------------
-1 - Explore the catalog of the PLS and look through all the books we have in store for you. this will provide a list of all books.
+[1] - Explore the catalog of the PLS and look through all the books we have in store for you. this will provide a list of all books.
+
 2 - If you would like to search for a specific book, you can use this function to search for your book by title or by author. (not case sensitive)
+
 3 - Explore the actual library of the PLS and look through all the books items we have in store for you. this will provide a list of all physical copies that are available in store.
+
 4 - If you would like to search for a specific book item, you can use this function to search for your book item by title or by author and see how many copies are left in the library. (not case sensitive)
+
 5 - If you consider loaning a book from the library, select this option and give the id to loan the book you want.
+
 6 - If you want to return a book you loaned from the library, select this option and select the id of the book you want to return.
 If you have no books to return, you will receive a message that says "You have no book to return".

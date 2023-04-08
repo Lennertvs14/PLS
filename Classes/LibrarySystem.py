@@ -25,9 +25,9 @@ class LibrarySystem:
                 items = list(csv.DictReader(file, delimiter=";"))
             
             for item in items:
-                for lol in item:
-                    if lol == "Number":
-                        item[lol] = int(item[lol].strip())
+                for row in item:
+                    if row == "Number":
+                        item[row] = int(item[row].strip())
             return items
         else:
             print("Invalid file path.")
