@@ -1,0 +1,77 @@
+Welcome to the user manual for librarians of this Public Library System! (made by Lennert & Jasper)
+
+When you first launch the system you will be greeted and you will be asked to login using your username and password.
+---------------------------------------------------
+Welcome!
+
+Enter your username:
+Enter your password: 
+---------------------------------------------------
+
+If you are the librarian, you can login with username = admin and password = admin123 to unlock all functionalties.
+Otherwise if you are a member, you can login with your assigned username and password.
+
+All functionalities will be rather self-explanitory, but this manual will describe everything in more detail for your understanding of the PLS.
+
+Disclaimer: Book = information of a book, abstract concept of a book in the catalog. 
+            Book item = physical copy of a book in the library
+
+In contrary with a Member, as a Librarian   you have a lot more functionalities and access to data of the PLS.
+-----------------------------------------------------------------------------
+What would you like to do?
+ [1] Explore members
+ [2] Add member
+ [3] Edit member
+ [4] Delete member
+ [5] Check book item status for member
+ [6] Add list of members
+ [7] Explore catalog
+ [8] Add book
+ [9] Edit book
+ [10] Delete book
+ [11] Search catalog
+ [12] Add list of books
+ [13] Explore book items
+ [14] Add book item
+ [15] Edit book item
+ [16] Delete book item
+ [17] Search book item
+ [18] Lend book item to member
+ [19] Make backup
+ [20] Restore backup
+ [21] Restore and remove backup
+-----------------------------------------------------------------------------
+1 - Print a list of all current members of the PLS.
+2 - If a person would like to be a member, you can use this function to add a member. You will run into a list of details you can fill in to register this person's info. 
+An example of how a member looks in the database:
+------------------------------------------------
+    "Number": 1,                           (is automatically generated when finished entering the details)
+    "GivenName": "Hisham",
+    "Surname": "Altink",
+    "StreetAddress": "Borkelsedijk 53",
+    "ZipCode": "5571 GA",
+    "City": "Bergeijk",
+    "EmailAddress": "hishamaltink@teleworm.us",
+    "Username": "reech1950",
+    "Password": "fgr5d4",
+    "TelephoneNumber": "06-16898224"
+------------------------------------------------
+3 -  
+4 -  
+5 -  
+6 -  
+7 - Explore the catalog of the PLS and look through all the books we have in store for you. this will provide a list of all books.
+8 -  
+9 -  
+10 -  
+11 - If you would like to search for a specific book, you can use this function to search for your book by title or by author. (not case sensitive)
+12 -  
+13 - Explore the actual library of the PLS and look through all the books items we have in store for you. this will provide a list of all physical copies that are available in store.
+14 -  
+15 -  
+16 -  
+17 - If you would like to search for a specific book item, you can use this function to search for your book item by title or by author and see how many copies are left in the library. (not case sensitive)
+18 -  
+19 -  
+20 -  
+21 -  

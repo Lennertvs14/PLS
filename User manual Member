@@ -1,6 +1,6 @@
-Welcome to the user manual of this Public Library System! (made by Lennert & Jasper)
+Welcome to the user manual for members of this Public Library System! (made by Lennert & Jasper)
 
-When you first launch the system you will be greeted and you will be asked to login using your username and password.
+When you first launch the system you will be greeted and you will be asked to login using your username and password:
 ---------------------------------------------------
 Welcome!
 
@@ -8,13 +8,12 @@ Enter your username:
 Enter your password: 
 ---------------------------------------------------
 
-If you are the administrator, you can login with username = admin and password = admin123 to unlock all functionalties.
-Otherwise if you are a member, you can login with your assigned username and password.
+All functionalities will be rather self-explanitory, but this manual will describe everything in more detail for your understanding of the PLS.
 
 Disclaimer: Book = information of a book, abstract concept of a book in the catalog. 
             Book item = physical copy of a book in the library
 
-As a Member you only have limited functionalities:
+As a Member you only have limited functionalities: 
 ---------------------------------------------------
 What would you like to do?
  [1] Explore catalog
@@ -28,4 +27,6 @@ What would you like to do?
 2 - If you would like to search for a specific book, you can use this function to search for your book by title or by author. (not case sensitive)
 3 - Explore the actual library of the PLS and look through all the books items we have in store for you. this will provide a list of all physical copies that are available in store.
 4 - If you would like to search for a specific book item, you can use this function to search for your book item by title or by author and see how many copies are left in the library. (not case sensitive)
-5 - 
+5 - If you consider loaning a book from the library, select this option and give the id to loan the book you want.
+6 - If you want to return a book you loaned from the library, select this option and select the id of the book you want to return.
+If you have no books to return, you will receive a message that says "You have no book to return".
