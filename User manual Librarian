@@ -42,7 +42,7 @@ What would you like to do?
  [21] Restore and remove backup
 -----------------------------------------------------------------------------
 1 - Print a list of all current members of the PLS.
-2 - If a person would like to be a member, you can use this function to add a member. You will run into a list of details you can fill in to register this person's info. 
+2 - If a person would like to be a member, you can use this function to add a member. You will run into a list of details you can enter to register this person's info. 
 An example of how a member looks in the database:
 ------------------------------------------------
     "Number": 1,                           (is automatically generated when finished entering the details)
@@ -56,7 +56,7 @@ An example of how a member looks in the database:
     "Password": "fgr5d4",
     "TelephoneNumber": "06-16898224"
 ------------------------------------------------
-3 -  
+3 - If you would like to edit a specific member's information. you can select this option to do that. You will see the list of members and it will ask you to enter the id of the person you would to edit. It will ask you
 4 -  
 5 -  
 6 -  
