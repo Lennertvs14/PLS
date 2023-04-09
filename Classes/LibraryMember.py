@@ -95,8 +95,8 @@ class LibraryMember(Person):
         return False
 
     def return_book_item(self):
-        borrowed_books = len(self.borrowed_books)
-        if borrowed_books > 0:
+        borrowed_books = self.borrowed_books
+        if borrowed_books is not None and len(borrowed_books) > 0:
             loan_item = self.__get_loan_item_to_return_by_user_input()
             book_item_to_return = loan_item['book_item']
             # Update the library's book items.
