@@ -311,11 +311,18 @@ class LibraryAdmin(Person):
             print("There are no other details to edit at a book item, maybe you're looking to alter the book it self?")
 
     def delete_book_item(self):
-        # TODO: 1. Check the delete member function or delete book function if it already exist
-        # TODO: 2. Keep DRY-principles in mind, because your edit_book_item will also require user input for choosing a book_item
-        # TODO: 3. Remove the book item
-        # TODO: 4. Test your solution
-        print("Not implemented yet.")
+        book_item_to_delete = self.__get_book_item_by_user_input()
+        book_items = self.library.book_items
+        book_items.remove(book_item_to_delete)
+        self.update_data("Data/BookItems.json", book_items)
+        print(book_item_to_delete["book"]["title"], "from", book_item_to_delete["book"]["author"],
+              "has been removed from the catalog.")
+
+    def __get_book_item_by_user_input(self):
+        print("Available books:\n")
+        self.library.print_all_book_items()
+        user_input = input("\nEnter a digit of the book you would like to move forward with: ").strip()
+        if user_input.isdigit() and 0 < int(user_input) <= len(self.library.book_items):
             return self.library.book_items[int(user_input)-1]
         else:
             print("Invalid input, please try again.\n")
