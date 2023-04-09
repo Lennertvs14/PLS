@@ -1,4 +1,4 @@
-Welcome to the user manual for librarians of this Public Library System! (made by Lennert & Jasper)
+Welcome to the user manual for library administrators of this Public Library System! (Made by Lennert & Jasper)
 
 When you first launch the system you will be greeted and you will be asked to login using your username and password.
 ---------------------------------------------------
@@ -8,15 +8,15 @@ Enter your username:
 Enter your password: 
 ---------------------------------------------------
 
-If you are the librarian, you can login with username = admin and password = admin123 to unlock all functionalties.
+If you are the librarian, you can login with username = admin and password = admin123 to unlock all functionalities.
 Otherwise if you are a member, you can login with your assigned username and password.
 
-All functionalities will be rather self-explanitory, but this manual will describe everything in more detail for your understanding of the PLS.
+All functionalities will be rather self-explanatory, but this manual will describe everything in more detail for your understanding of the PLS.
 
 Disclaimer: Book = information of a book, abstract concept of a book in the catalog. 
             Book item = physical copy of a book in the library
 
-In contrary with a Member, as a Librarian   you have a lot more functionalities and access to data of the PLS.
+In contrary with a Member, as a Librarian you have a lot more functionalities and access to data of the PLS.
 -----------------------------------------------------------------------------
 What would you like to do?
  [1] Explore members
