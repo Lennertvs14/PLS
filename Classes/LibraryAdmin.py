@@ -295,11 +295,20 @@ class LibraryAdmin(Person):
             return self.add_book_item()
 
     def edit_book_item(self):
-        # TODO: 1. Check the edit member function or edit book function if it already exist
-        # TODO: 2. Keep DRY-principles in mind, because your delete_book_item will also require user input for choosing a book_item
-        # TODO: 3. Make the book_item editable
-        # TODO: 4. Test your solution
-        print("Not implemented yet.")
+        book_item_to_edit = self.__get_book_item_by_user_input()
+        print(f"\nWould you like to edit the printed copies?")
+        yes_or_no = input("Enter 1, 2 or 3 to choose:\n [1] Yes\n [2] No\n [3] Exit\n-> ").strip()
+        if yes_or_no == "1":
+            value = input(f"Please enter the new amount of printed copies: ").strip()
+            if value.isdigit() and int(value) > 0:
+                book_item_to_edit['printed_copies'] = int(value)
+                self.update_data("Data/BookItems.json", self.library.book_items)
+                print("\nBook's printed copies are successfully edited!")
+            else:
+                print("Invalid input, the amount of copies must be a positive digit, please try again.")
+                return self.edit_book_item()
+        else:
+            print("There are no other details to edit at a book item, maybe you're looking to alter the book it self?")
 
     def delete_book_item(self):
         # TODO: 1. Check the delete member function or delete book function if it already exist
@@ -307,6 +316,10 @@ class LibraryAdmin(Person):
         # TODO: 3. Remove the book item
         # TODO: 4. Test your solution
         print("Not implemented yet.")
+            return self.library.book_items[int(user_input)-1]
+        else:
+            print("Invalid input, please try again.\n")
+            return self.__get_book_by_user_input()
 
     def check_book_item_status_for_member(self):
         from Classes.LoanItem import LoanItem
