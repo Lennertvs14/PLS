@@ -75,13 +75,13 @@ class LibraryMember(Person):
                     return
             loan_item = LoanItem(self, book_item_to_loan)
             # Update the library's book items.
-            book_item_list_index = self.library.get_book_item_index_by_book_id(book_item_to_loan['book']['ISBN'])
+            book_item_list_index = self.library.get_book_item_index_by_book_id(book_item_to_loan['ISBN'])
             self.library.book_items[book_item_list_index]['printed_copies'] -= 1
             # Update the corresponding json data storage file.
             self.update_data("Data/BookItems.json", self.library.book_items)
             # Give user a success notification.
-            print(f"You successfully loaned '{book_item_to_loan['book']['title']}' "
-                  f"by {book_item_to_loan['book']['author']}.")
+            print(f"You successfully loaned '{book_item_to_loan['title']}' "
+                  f"by {book_item_to_loan['author']}.")
             print(f"We expect you to return it before {loan_item.return_date}.")
         else:
             print("You are not allowed to borrow more than 3 books, simultaneously.")
@@ -100,7 +100,7 @@ class LibraryMember(Person):
             loan_item = self.__get_loan_item_to_return_by_user_input()
             book_item_to_return = loan_item['book_item']
             # Update the library's book items.
-            library_book_item_index = self.library.get_book_item_index_by_book_id(book_item_to_return['book']['ISBN'])
+            library_book_item_index = self.library.get_book_item_index_by_book_id(book_item_to_return['ISBN'])
             if library_book_item_index != -1:
                 self.library.book_items[library_book_item_index]['printed_copies'] += 1
                 self.library.update_book_items(self.library.book_items)
@@ -113,8 +113,8 @@ class LibraryMember(Person):
                     if members_are_equal and international_standard_book_numbers_are_equal:
                         loan_items.remove(loan_item)
                 self.update_data("Data/LoanItems.json", loan_items)
-                print(f"You successfully returned '{book_item_to_return['book']['title']}' "
-                      f"by {book_item_to_return['book']['author']}.")
+                print(f"You successfully returned '{book_item_to_return['title']}' "
+                      f"by {book_item_to_return['author']}.")
             else:
                 raise ValueError("This library did not loan this book to you.")
         else:
@@ -135,8 +135,7 @@ class LibraryMember(Person):
             loan_items = self.borrowed_books
         count = 1
         for loan_item in loan_items:
-            print(f"   [{count}] '{loan_item['book_item']['book']['title']}'"
-                  f" by {loan_item['book_item']['book']['author']}.")
+            print(f"   [{count}] '{loan_item['book_item']['title']}' by {loan_item['book_item']['author']}.")
             count += 1
 
     @staticmethod

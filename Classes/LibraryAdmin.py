@@ -277,16 +277,26 @@ class LibraryAdmin(Person):
         print("Done!")
 
     def add_book_item(self):
+        from Classes.BookItem import BookItem
         self.explore_catalog()
         book_item_id = input("Enter a digit for the book item you'd like to add: ").strip()
         quantity_to_add = input("Enter a digit for the amount of book items you'd like to add: ").strip()
-        book_item_id_is_valid = book_item_id.isdigit() and -1 < int(book_item_id) <= len(self.library.book_items)
-        if book_item_id_is_valid and quantity_to_add.isdigit():
-            book_item = self.library.book_items[int(book_item_id) - 1]
-            old_quantity = book_item['printed_copies']
-            book_item['printed_copies'] += int(quantity_to_add)
+        book_item_id_is_digit = book_item_id.isdigit() and int(book_item_id) > -1
+        if book_item_id_is_digit:
+            if int(book_item_id) <= len(self.library.book_items):
+                book_item = self.library.book_items[int(book_item_id) - 1]
+                old_quantity = book_item['printed_copies']
+                book_item['printed_copies'] += int(quantity_to_add)
+            elif int(book_item_id) <= len(self.catalog.books):
+                book_item = BookItem(self.catalog.books[int(book_item_id) - 1], int(quantity_to_add))
+                old_quantity = 0
+                self.library.book_items.append(book_item.get_book_item_data())
+                book_item = book_item.__dict__
+            else:
+                print("Invalid input, please try again.\n")
+                return self.add_book_item()
             self.update_data("Data/BookItems.json", self.library.book_items)
-            book_details = f"'{book_item['book']['title']}' by {book_item['book']['author']}"
+            book_details = f"'{book_item['title']}' by {book_item['author']}"
             print(f"Done!"
                   f"\nThere used to be {old_quantity} paper printed_copies, "
                   f"but there are now {book_item['printed_copies']} paper printed_copies available for {book_details}.")
@@ -315,7 +325,7 @@ class LibraryAdmin(Person):
         book_items = self.library.book_items
         book_items.remove(book_item_to_delete)
         self.update_data("Data/BookItems.json", book_items)
-        print(book_item_to_delete["book"]["title"], "from", book_item_to_delete["book"]["author"],
+        print(book_item_to_delete["title"], "from", book_item_to_delete["author"],
               "has been removed from the catalog.")
 
     def __get_book_item_by_user_input(self):
@@ -340,7 +350,7 @@ class LibraryAdmin(Person):
             # Show book item status foreach borrowed book
             print("The member is borrowing these books:")
             for loan_item in borrowed_books:
-                book_details = f"'{loan_item['book_item']['book']['title']}' by {loan_item['book_item']['book']['author']}"
+                book_details = f"'{loan_item['book_item']['title']}' by {loan_item['book_item']['author']}"
                 print("    " + book_details)
                 if LoanItem.is_overdue(loan_item['return_date']):
                     days_left_to_return = 0
@@ -371,7 +381,7 @@ class LibraryAdmin(Person):
         loan_item = member.borrow_book_item(True)
         if isinstance(loan_item, LoanItem):
             # Workaround to appropriately update the data files
-            book_item_list_index = self.library.get_book_item_index_by_book_id(loan_item.book_item['book']['ISBN'])
+            book_item_list_index = self.library.get_book_item_index_by_book_id(loan_item.book_item['ISBN'])
             self.library.book_items[book_item_list_index]['printed_copies'] -= 1
 
     def create_backup(self):
@@ -382,3 +392,5 @@ class LibraryAdmin(Person):
     def restore_backup(self, delete_backup_after=False):
         from Classes.Backup import Backup
         Backup.restore_backup(delete_backup_after)
+        self.library.initialize_book_items()
+        self.catalog.books = self.get_data("Data/Books.json")

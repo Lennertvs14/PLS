@@ -1,9 +1,10 @@
-class BookItem:
-    # TODO: Make a BookItem inherit from book and leave the book object out of the attributes, if that's possible.
-    #  This will also fix the double ISBN data issue.
-    def __init__(self, book_isbn, book, printed_copies=5):
-        self.ISBN = book_isbn
-        self.book = book
+from Classes.Book import Book
+
+
+class BookItem(Book):
+    def __init__(self, book, printed_copies=5):
+        super().__init__(book['author'], book['country'], book['imageLink'], book['language'], book['link'],
+                         book['pages'], book['title'], book['ISBN'], book['year'])
         self.printed_copies = printed_copies
 
     @property
@@ -12,3 +13,13 @@ class BookItem:
             return True
         else:
             return False
+
+    def get_book_item_data(self):
+        """ Get the book item's ISBN and printed copies formatted as a dictionary. """
+        return {
+            'title': self.title[0],
+            'author': self.author[0],
+            'ISBN': self.ISBN[0],
+            'printed_copies': self.printed_copies
+        }
+

@@ -33,7 +33,7 @@ class Backup:
                 try:
                     with open(file_path, "r") as file:
                         data = json.load(file)
-                except FileNotFoundError:
+                except Exception as e:
                     data = None
                 data_dict[file_name[:-5]] = data
         return data_dict
