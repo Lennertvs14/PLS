@@ -45,10 +45,10 @@ class Person(LibrarySystem):
         search_term = input("Enter book title or author: ").lower()
         matching_books = []
         for book_item in self.library.book_items:
-            if search_term in book_item['book']["author"].lower() or search_term in book_item['book']["title"].lower():
+            if search_term in book_item["author"].lower() or search_term in book_item["title"].lower():
                 matching_books.append(book_item)
         if len(matching_books) > 0:
             for book_item in matching_books:
-                print(f"    [{book_item['printed_copies']}x] {book_item['book']['title']} by {book_item['book']['author']}")
+                print(f"    [{book_item['printed_copies']}x] {book_item['title']} by {book_item['author']}")
         else:
             print("    No matching book item found.")
