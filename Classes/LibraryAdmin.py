@@ -1,5 +1,3 @@
-import csv
-import json
 from Classes.Book import Book
 from Classes.LibraryMember import LibraryMember
 from Classes.Person import Person
@@ -177,13 +175,11 @@ class LibraryAdmin(Person):
 
     def add_list_of_members(self):
         """This method will load and add a list of members to the system, all at once using a csv file."""
-
-        members = self.get_data("Data/Members.json")
-        file_to_import = str(input("What is the name of the file you want to import? (make sure to put the file in the Import folder with .csv)\n"))
-        new_members = self.get_csv_data("Import/" + file_to_import)
-        members = members + new_members
-
-        self.update_data("Data/Members.json", members)
+        # TODO: 1. Get the csv file with members
+        # TODO: 2. Don't import members if they already exist (in our json file), compare by the unique identifier: username
+        # TODO: 3. Test your implementation
+        # TODO: 4. Import a couple of members, then run option 1 (explore members) and validate if they're visible.
+        print("Not implemented yet.")
 
     def add_book(self):
         new_book = Book.create_book_by_user_input()
@@ -238,16 +234,12 @@ class LibraryAdmin(Person):
             return self.__get_book_by_user_input()
 
     def add_list_of_books(self):
-        """This method will load and add a list of books to the system, all at once using a json file."""
-
-        books = self.catalog.books
-        file_to_import = str(input("What is the name of the file you want to import? (make sure to put the file in the Import folder with .json)\n"))
-
-        with open(file_to_import) as file:
-            new_books = json.load(file)
-        
-        books = books + new_books
-        self.update_data("Data/Books.json", books)
+        """This method will load and add a list of members to the system, all at once using a json file."""
+        # TODO: 1. Get the json file with books
+        # TODO: 2. Don't import books if they already exist (in our json file), compare by the unique identifier: ISBN
+        # TODO: 3. Test your implementation
+        # TODO: 4. Import a couple of books, then run option 7 (explore catalog) and validate if they're visible.
+        print("Not implemented yet.")
 
     def add_book_item(self):
         self.explore_catalog()
@@ -268,59 +260,18 @@ class LibraryAdmin(Person):
             return self.add_book_item()
 
     def edit_book_item(self):
-        book_item_to_edit = input("Enter the title of the book item you want to edit: ")
-        book_items = self.library.book_items
-        for book_item in book_items:
-            if book_item['book']["title"] == book_item_to_edit or book_item['book']["author"] == book_item_to_edit:
-                for key in book_item:
-                    print(f"\nWould you like to edit the {key}?")
-                    yes_or_no = input("Enter 1, 2 or 3 to choose:\n [1] Yes\n [2] No\n [3] Exit\n-> ").strip()
-                    if yes_or_no == "1":
-                        if key == 'book':
-                            for book_detail in book_item['book']:
-                                print(f"\nWould you like to edit the {book_detail}?")
-                                yes_or_no = input("Enter 1, 2 or 3 to choose:\n [1] Yes\n [2] No\n [3] Exit\n-> ").strip()
-                                if yes_or_no == "1":
-                                    value = input(f"Please enter the {book_detail}: ")
-                                    if value != "" :
-                                        book_item['book'][book_detail] = value
-                                    else:
-                                        print("Invalid input.")
-                                if yes_or_no == "3":
-                                    break
-                        else:
-                            value = input(f"Please enter the {key}: ")
-                            if value != "" :
-                                book_item[key] = value
-                            else:
-                                print("Invalid input.")
-                    if yes_or_no == "3":
-                        break
-                    
-                print(f"\n{book_item_to_edit}")
-
-        self.update_data("Data/BookItems.json", book_items)
-        print("\nBookitem succesfully edited!")
+        # TODO: 1. Check the edit member function or edit book function if it already exist
+        # TODO: 2. Keep DRY-principles in mind, because your delete_book_item will also require user input for choosing a book_item
+        # TODO: 3. Make the book_item editable
+        # TODO: 4. Test your solution
+        print("Not implemented yet.")
 
     def delete_book_item(self):
-        book_item_to_delete = input("Enter the title or author of the book item you want to remove: ")
-        book_items = self.library.book_items
-        found_book = False
-        for book_item in book_items:
-            if not found_book:
-                if book_item["book"]["title"] == book_item_to_delete or book_item["book"]["author"] == book_item_to_delete:
-                    found_book = True
-                    if book_item["copies"] > 0:
-                        book_item["copies"] -= 1
-                        print(f"Succesfully deleted a copy of {book_item['book']['title']} by {book_item['book']['author']}")
-                    if book_item["copies"] == 0:
-                        print(f"There are no copies left of {book_item['book']['title']} by {book_item['book']['author']}")
-                    self.update_data("Data/BookItems.json", book_items)
-                    break
-        if not found_book:
-            print(book_item_to_delete,"is not in the catalog. check if you entered the correct name! (case sensitive)\n")
-            return self.delete_book_item()
-        
+        # TODO: 1. Check the delete member function or delete book function if it already exist
+        # TODO: 2. Keep DRY-principles in mind, because your edit_book_item will also require user input for choosing a book_item
+        # TODO: 3. Remove the book item
+        # TODO: 4. Test your solution
+        print("Not implemented yet.")
 
     def check_book_item_status_for_member(self):
         from Classes.LoanItem import LoanItem

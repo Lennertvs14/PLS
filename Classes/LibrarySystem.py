@@ -1,7 +1,6 @@
-import csv
-import json
 from Classes.Library import Library
 from Classes.Catalog import Catalog
+import json
 
 
 class LibrarySystem:
@@ -19,20 +18,6 @@ class LibrarySystem:
         except Exception as e:
             return []
 
-    def get_csv_data(self, file_path):
-        filepath_is_empty = file_path is None or file_path == "" or not isinstance(file_path, str)
-        if not filepath_is_empty:
-            with open(file_path) as file:
-                items = list(csv.DictReader(file, delimiter=";"))
-            
-            for item in items:
-                for row in item:
-                    if row == "Number":
-                        item[row] = int(item[row].strip())
-            return items
-        else:
-            print("Invalid file path.")
-    
     def update_data(self, file_path, data_dict):
         filepath_is_empty = file_path is None or file_path == "" or not isinstance(file_path, str)
         if not filepath_is_empty:
