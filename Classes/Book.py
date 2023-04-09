@@ -33,6 +33,10 @@ class Book:
         return new_book
 
     @staticmethod
+    def get_book_by_user_input():
+        pass
+
+    @staticmethod
     def validate_field(field_name, input_value):
         special_validation_fields = ['ISBN']
         integer_validation_fields = ['pages', 'year']

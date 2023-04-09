@@ -1,0 +1,24 @@
+[
+    {
+      "author": "nieuw",
+      "country": "nieuw",
+      "imageLink": "images/things-fall-apart.jpg",
+      "language": "English",
+      "link": "https://en.wikipedia.org/wiki/Things_Fall_Apart\n",
+      "pages": 69,
+      "title": "test",
+      "ISBN": "9781234534597",
+      "year": 0
+    },
+    {
+      "author": "test2",
+      "country": "test2",
+      "imageLink": "images/fairy-tales.jpg",
+      "language": "Danish",
+      "link": "https://en.wikipedia.org/wiki/Fairy_Tales_Told_for_Children._First_Collection.\n",
+      "pages": 420,
+      "title": "Fairy tales",
+      "ISBN": "9345234567897",
+      "year": 0
+    }
+]
