@@ -183,7 +183,7 @@ class LibraryAdmin(Person):
         if file_type != ".csv":
             file_to_import += ".csv"
         new_members = self.__get_data_from_csv_file("Import/" + file_to_import)
-        if new_members is not None:
+        if new_members is not None and len(new_members) > 0:
             for member in new_members:
                 if LibraryMember.validate_username(member['Username']):
                     member.pop('Number')
@@ -192,8 +192,9 @@ class LibraryAdmin(Person):
                 else:
                     print(f"    [WARNING] '{member['GivenName']}' is not added to the library system.")
         else:
-            print("Invalid file, no data found.")
-        print("Members are successfully added!")
+            print(f"Invalid file '{file_to_import}', no data found.")
+            return
+        print("Done!")
 
     def __get_data_from_csv_file(self, file_path):
         import csv
@@ -204,22 +205,24 @@ class LibraryAdmin(Person):
         except Exception as e:
             print(f"Invalid file path {file_path}.")
 
-    def add_book(self):
-        new_book = Book.create_book_by_user_input()
+    def add_book(self, new_book=None):
+        if new_book is None:
+            book_to_add = Book.create_book_by_user_input()
+        else:
+            book_to_add = new_book
         book_is_unique = True
         duplicate_book = None
         for book in self.catalog.books:
-            if new_book['ISBN'] == book['ISBN']:
+            if book_to_add['ISBN'] == book['ISBN']:
                 book_is_unique = False
                 duplicate_book = book
         if book_is_unique:
-            books = self.catalog.books
-            books.append(new_book)
-            self.catalog.books.append(new_book)
-            self.update_data("Data/Books.json", books)
+            self.catalog.books.append(book_to_add)
+            self.update_data("Data/Books.json", self.catalog.books)
         else:
-            print(f"\nThis book is not unique, the ISBN already exist:\n    {duplicate_book}\nPlease try again.\n")
-            return self.add_book()
+            print(f"\nThis book is not unique, the ISBN already exist:\n    {book_to_add}\nPlease try again.\n")
+            if new_book is None:
+                return self.add_book()
 
     def edit_book(self):
         book_to_edit = self.__get_book_by_user_input()
@@ -257,12 +260,21 @@ class LibraryAdmin(Person):
             return self.__get_book_by_user_input()
 
     def add_list_of_books(self):
-        """This method will load and add a list of members to the system, all at once using a json file."""
-        # TODO: 1. Get the json file with books
-        # TODO: 2. Don't import books if they already exist (in our json file), compare by the unique identifier: ISBN
-        # TODO: 3. Test your implementation
-        # TODO: 4. Import a couple of books, then run option 7 (explore catalog) and validate if they're visible.
-        print("Not implemented yet.")
+        """This method will load and add a list of books to the system, all at once using a json file."""
+        instructions = "\n1. Put your json file in the Import folder."
+        print(instructions)
+        file_to_import = input("2. Enter the name of the file you want to import: ").strip()
+        file_type = file_to_import[-5:]
+        if file_type != ".json":
+            file_to_import += ".json"
+        new_books = self.get_data("Import/" + file_to_import)
+        if new_books is not None and len(new_books) > 0:
+            for book in new_books:
+                self.add_book(new_book=book)
+        else:
+            print(f"Invalid file '{file_to_import}', no data found.")
+            return
+        print("Done!")
 
     def add_book_item(self):
         self.explore_catalog()
