@@ -72,9 +72,10 @@ class LibraryAdmin(Person):
             print("Invalid input, please try again.")
             return self.show_interface()
 
-    def add_member(self):
+    def add_member(self, new_member=None):
         members = self.get_data("Data/Members.json")
-        new_member = self.create_member_by_user_input()
+        if new_member is None:
+            new_member = self.create_member_by_user_input()
         members.append(new_member)
         self.update_data("Data/Members.json", members)
 
@@ -175,11 +176,33 @@ class LibraryAdmin(Person):
 
     def add_list_of_members(self):
         """This method will load and add a list of members to the system, all at once using a csv file."""
-        # TODO: 1. Get the csv file with members
-        # TODO: 2. Don't import members if they already exist (in our json file), compare by the unique identifier: username
-        # TODO: 3. Test your implementation
-        # TODO: 4. Import a couple of members, then run option 1 (explore members) and validate if they're visible.
-        print("Not implemented yet.")
+        instructions = "\n1. Put your csv file in the Import folder."
+        print(instructions)
+        file_to_import = input("2. Enter the name of the file you want to import: ").strip()
+        file_type = file_to_import[-4:]
+        if file_type != ".csv":
+            file_to_import += ".csv"
+        new_members = self.__get_data_from_csv_file("Import/" + file_to_import)
+        if new_members is not None:
+            for member in new_members:
+                if LibraryMember.validate_username(member['Username']):
+                    member.pop('Number')
+                    member['Number'] = self.get_new_national_insurance_number()
+                    self.add_member(new_member=member)
+                else:
+                    print(f"    [WARNING] '{member['GivenName']}' is not added to the library system.")
+        else:
+            print("Invalid file, no data found.")
+        print("Members are successfully added!")
+
+    def __get_data_from_csv_file(self, file_path):
+        import csv
+        try:
+            with open(file_path) as file:
+                items = list(csv.DictReader(file, delimiter=";"))
+            return items
+        except Exception as e:
+            print(f"Invalid file path {file_path}.")
 
     def add_book(self):
         new_book = Book.create_book_by_user_input()

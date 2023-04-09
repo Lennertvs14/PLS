@@ -174,7 +174,7 @@ class LibraryMember(Person):
         if username_is_lowercase and username_is_unique:
             return True
         else:
-            print("Username must be lowercase and unique!")
+            print("    Username must be lowercase and unique!")
             return False
 
     @staticmethod
