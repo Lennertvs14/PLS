@@ -59,10 +59,10 @@ class Library:
         if should_sort:
             book_items = sorted(book_items, key=lambda b: b['book']['title'])
         if only_available_items:
-            book_items = [b for b in book_items if b['copies'] > 0]
+            book_items = [b for b in book_items if b['printed_copies'] > 0]
         for count, book_item in enumerate(book_items, start=1):
             print(
-                f"    [{count}] {book_item['copies']}x - {book_item['book']['title']} by {book_item['book']['author']}")
+                f"    [{count}] {book_item['printed_copies']}x - {book_item['book']['title']} by {book_item['book']['author']}")
         if should_sort:
             return book_items
 

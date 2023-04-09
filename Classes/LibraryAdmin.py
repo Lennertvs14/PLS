@@ -246,13 +246,13 @@ class LibraryAdmin(Person):
         book_item_id_is_valid = book_item_id.isdigit() and -1 < int(book_item_id) <= len(self.library.book_items)
         if book_item_id_is_valid and quantity_to_add.isdigit():
             book_item = self.library.book_items[int(book_item_id) - 1]
-            old_quantity = book_item['copies']
-            book_item['copies'] += int(quantity_to_add)
+            old_quantity = book_item['printed_copies']
+            book_item['printed_copies'] += int(quantity_to_add)
             self.update_data("Data/BookItems.json", self.library.book_items)
             book_details = f"'{book_item['book']['title']}' by {book_item['book']['author']}"
             print(f"Done!"
-                  f"\nThere used to be {old_quantity} paper copies, "
-                  f"but there are now {book_item['copies']} paper copies available for {book_details}.")
+                  f"\nThere used to be {old_quantity} paper printed_copies, "
+                  f"but there are now {book_item['printed_copies']} paper printed_copies available for {book_details}.")
         else:
             print("Invalid input, please try again.\n")
             return self.add_book_item()
@@ -315,7 +315,7 @@ class LibraryAdmin(Person):
         if isinstance(loan_item, LoanItem):
             # Workaround to appropriately update the data files
             book_item_list_index = self.library.get_book_item_index_by_book_id(loan_item.book_item['book']['ISBN'])
-            self.library.book_items[book_item_list_index]['copies'] -= 1
+            self.library.book_items[book_item_list_index]['printed_copies'] -= 1
 
     def create_backup(self):
         from Classes.Backup import Backup

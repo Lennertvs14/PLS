@@ -49,6 +49,6 @@ class Person(LibrarySystem):
                 matching_books.append(book_item)
         if len(matching_books) > 0:
             for book_item in matching_books:
-                print(f"    [{book_item['copies']}x] {book_item['book']['title']} by {book_item['book']['author']}")
+                print(f"    [{book_item['printed_copies']}x] {book_item['book']['title']} by {book_item['book']['author']}")
         else:
             print("    No matching book item found.")
