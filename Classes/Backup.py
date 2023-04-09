@@ -9,7 +9,7 @@ class Backup:
     def __init__(self, description=""):
         self.id = id(self)
         self.date = str(date.today())
-        self.name = self.date + "-" + str(self.id)
+        self.file_name = self.date + "-" + str(self.id)
         self.description = description
         self.data = {}
         self.backup()
@@ -64,7 +64,7 @@ class Backup:
                     with open(file_path, 'w') as file:
                         json.dump(data, file, indent=4)
                 if delete_backup_after:
-                    backups = [backup for backup in current_backups if backup['name'] != backup_to_restore['name']]
+                    backups = [backup for backup in current_backups if backup['file_name'] != backup_to_restore['file_name']]
                     with open(Backup.location, "w") as file:
                         json.dump(backups, file, indent=4)
                 print("Restoring the backup was successful.")
