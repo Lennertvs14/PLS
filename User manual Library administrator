@@ -8,6 +8,11 @@ Enter your username:
 Enter your password: 
 ---------------------------------------------------
 
+Hit enter everytime after you put in your requested answer. For example: 
+------------------------------------------- 
+Enter your username: blabla1999 (hit enter) 
+-------------------------------------------
+
 If you are the librarian, you can login with username = admin and password = admin123 to unlock all functionalities.
 Otherwise if you are a member, you can login with your assigned username and password.
 
