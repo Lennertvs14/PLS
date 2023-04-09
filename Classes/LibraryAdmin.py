@@ -198,7 +198,6 @@ class LibraryAdmin(Person):
             print(f"\nThis book is not unique, the ISBN already exist:\n    {duplicate_book}\nPlease try again.\n")
             return self.add_book()
 
-    # TODO: Use the member's static validation methods.
     def edit_book(self):
         book_to_edit = self.__get_book_by_user_input()
         books = self.catalog.books
@@ -207,7 +206,10 @@ class LibraryAdmin(Person):
             yes_or_no = input("Enter 1, 2 or 3 to choose:\n [1] Yes\n [2] No\n [3] Exit\n-> ").strip()
             if yes_or_no == "1":
                 value = input(f"Please enter the {key}: ").strip()
-                book_to_edit[key] = value
+                if Book.validate_field(key, value):
+                    book_to_edit[key] = value
+                else:
+                    print("Invalid input.")
             if yes_or_no == "3":
                 break
         print(f"\n{book_to_edit}")
