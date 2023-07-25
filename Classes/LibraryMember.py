@@ -13,8 +13,9 @@ class LibraryMember(Person):
         "Return book item"
     ]
 
-    def __init__(self, GivenName, Surname, StreetAddress, ZipCode, City,EmailAddress,Username,Password,TelephoneNumber):
+    def __init__(self, Number, GivenName, Surname, StreetAddress, ZipCode, City,EmailAddress,Username,Password,TelephoneNumber):
         super().__init__()
+        self.national_insurance_number = Number
         self.GivenName = GivenName
         self.Surname = Surname
         self.StreetAddress = StreetAddress
@@ -73,7 +74,7 @@ class LibraryMember(Person):
                 if self.user_already_borrows_book_item(book_item_to_loan):
                     print("You are already borrowing this book.")
                     return
-            loan_item = LoanItem(self, book_item_to_loan)
+            loan_item = LoanItem(self.national_insurance_number, book_item_to_loan)
             # Update the library's book items.
             book_item_list_index = self.library.get_book_item_index_by_book_id(book_item_to_loan['ISBN'])
             self.library.book_items[book_item_list_index]['printed_copies'] -= 1
@@ -85,6 +86,7 @@ class LibraryMember(Person):
             print(f"We expect you to return it before {loan_item.return_date}.")
         else:
             print("You are not allowed to borrow more than 3 books, simultaneously.")
+            input("Press the enter key on your key board to continue.")
         if return_the_loan_item is True:
             return loan_item
 

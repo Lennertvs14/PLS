@@ -8,8 +8,6 @@ def main():
             user.show_interface()
         else:
             # Convert the user (dictionary) to a member (instance)
-            if 'Number' in user:
-                user.pop('Number')
             member = LibraryMember(**user)
             member.show_interface()
         return main()

@@ -44,7 +44,9 @@ class Library:
             book_item = sorted_book_items[book_id]
             return book_item
         else:
-            raise ValueError(f"Your input ({book_id+1}) is invalid.")
+            print(f"Your input ({book_id+1}) is invalid.")
+            input("Press the enter key on your key board to try again.")
+            return self.get_book_item_by_user_input()
 
     def print_all_book_items(self, should_sort=False, only_available_items=False):
         """

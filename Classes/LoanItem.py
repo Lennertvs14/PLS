@@ -3,8 +3,8 @@ import json
 
 
 class LoanItem:
-    def __init__(self, member, book_item):
-        self.borrower = member.national_insurance_number
+    def __init__(self, member_national_insurance_number, book_item):
+        self.borrower = member_national_insurance_number
         self.book_item = book_item
         self.loan_date = datetime.now().strftime("%Y-%m-%d")
         self.return_date = (datetime.now() + timedelta(days=60)).strftime("%Y-%m-%d")
