@@ -365,9 +365,7 @@ class LibraryAdmin(Person):
             print("    The member is currently not borrowing any books.")
 
     def __convert_member_from_dict_to_instance(self, member_dict):
-        member_national_insurance_number = member_dict.pop('Number')
         member_instance = LibraryMember(**member_dict)
-        member_instance.national_insurance_number = member_national_insurance_number
         return member_instance
 
     def lend_book_item_to_member(self):
