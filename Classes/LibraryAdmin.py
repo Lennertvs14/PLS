@@ -298,8 +298,8 @@ class LibraryAdmin(Person):
             self.update_data("Data/BookItems.json", self.library.book_items)
             book_details = f"'{book_item['title']}' by {book_item['author']}"
             print(f"Done!"
-                  f"\nThere used to be {old_quantity} paper printed_copies, "
-                  f"but there are now {book_item['printed_copies']} paper printed_copies available for {book_details}.")
+                  f"\nThere used to be {old_quantity} paper printed copies, "
+                  f"but there are now {book_item['printed_copies']} paper printed copies available for {book_details}.")
         else:
             print("Invalid input, please try again.\n")
             return self.add_book_item()
