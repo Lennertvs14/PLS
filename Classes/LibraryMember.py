@@ -142,15 +142,13 @@ class LibraryMember(Person):
 
     @staticmethod
     def validate_field(field_name, input_value):
-        special_validation_fields = ['EmailAddress', 'ZipCode', 'Username']
+        special_validation_fields = ['EmailAddress', 'Username']
         # There are no integer fields to validate yet.
         input_is_correct = 0 < len(input_value) < 100
         if input_is_correct:
             if field_name in special_validation_fields:
                 if field_name == 'EmailAddress':
                     return LibraryMember.validate_email(input_value)
-                elif field_name == 'ZipCode':
-                    return LibraryMember.validate_zip_code(input_value)
                 else:
                     return LibraryMember.validate_username(input_value)
             else:
@@ -161,11 +159,6 @@ class LibraryMember(Person):
     def validate_email(email):
         email_regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
         return re.match(email_regex, email) is not None
-
-    @staticmethod
-    def validate_zip_code(zip_code):
-        zip_regex = r'^\d{4}\s?[A-Z]{2}$'
-        return re.match(zip_regex, zip_code) is not None
 
     @staticmethod
     def validate_username(username):
