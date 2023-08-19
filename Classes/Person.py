@@ -8,6 +8,8 @@ class Person(LibrarySystem):
         self.national_insurance_number = self.get_new_national_insurance_number()
 
     def get_new_national_insurance_number(self):
+        """ This function leverages the fact that only administrators add users,
+        and thus that member numbers are sequentially ordered. """
         member_identities = self.__get_members_national_insurance_numbers()
         return max(member_identities) + 1
 
@@ -19,7 +21,7 @@ class Person(LibrarySystem):
         return member_identities
 
     def explore_catalog(self):
-        """ This function shows all the books from the catalog."""
+        """ This function shows all the books from the catalog. """
         self.catalog.print_all_books()
 
     def search_for_book(self):

@@ -79,9 +79,9 @@ class LibraryAdmin(Person):
         members.append(new_member)
         self.update_data("Data/Members.json", members)
 
-    @staticmethod
-    def create_member_by_user_input():
-        empty_member_object = LibraryMember("", "", "", "", "", "", "", "", "")
+    def create_member_by_user_input(self):
+        new_national_insurance_number = self.get_new_national_insurance_number()
+        empty_member_object = LibraryMember(new_national_insurance_number, "", "", "", "", "", "", "", "", "")
         field_names = [attr for attr in dir(empty_member_object)
                        if not callable(getattr(empty_member_object, attr)) and not attr.startswith("__")]
         fields_to_exclude = \
