@@ -64,7 +64,15 @@ class LibraryMember(Person):
             print("Invalid input, please try again.")
             return self.show_interface()
 
-    def borrow_book_item(self, return_the_loan_item=False):
+    def borrow_book_item(self, retrieve_loan_item=False):
+        """
+        Borrow a book item from the library.
+        Args:
+            retrieve_loan_item (bool): If True, the function will return the loan item object.
+        Returns:
+            LoanItem or None: If retrieve_loan_item is True, returns the loan item object;
+            otherwise, returns None.
+        """
         from Classes.LoanItem import LoanItem
         borrowed_books = self.borrowed_books
         max_amount_of_books_to_have = 3
@@ -87,7 +95,7 @@ class LibraryMember(Person):
         else:
             print("You are not allowed to borrow more than 3 books, simultaneously.")
             input("Press the enter key on your key board to continue.")
-        if return_the_loan_item is True:
+        if retrieve_loan_item is True:
             return loan_item
 
     def user_already_borrows_book_item(self, book_item):
