@@ -229,7 +229,7 @@ class LibraryAdmin(Person):
         books = self.catalog.books
         for key in book_to_edit:
             print(f"\nWould you like to edit the {key}?")
-            yes_or_no = input("Enter 1, 2 or 3 to choose:\n [1] Yes\n [2] No\n [3] Exit\n-> ").strip()
+            yes_or_no = input("Enter 1, 2 or 3 to choose:\n [1] Yes\n [2] No\n [3] Stop editing\n-> ").strip()
             if yes_or_no == "1":
                 value = input(f"Please enter the {key}: ").strip()
                 if Book.validate_field(key, value):
