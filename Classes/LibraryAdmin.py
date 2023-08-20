@@ -239,23 +239,27 @@ class LibraryAdmin(Person):
                 data_dict_list.append(data_dict)
         return data_dict_list
 
-    def add_book(self, new_book=None):
-        if new_book is None:
+    def add_book(self, book_to_add=None):
+        if book_to_add is None:
             book_to_add = Book.create_book_by_user_input()
         else:
-            book_to_add = new_book
+            book_to_add = book_to_add
         book_is_unique = True
         duplicate_book = None
         for book in self.catalog.books:
+            # ISBN is a unique identifier assigned to each edition and version of a book.
+            # So checking for duplicates is done by comparing International Standard Book Numbers.
             if book_to_add['ISBN'] == book['ISBN']:
                 book_is_unique = False
                 duplicate_book = book
         if book_is_unique:
             self.catalog.books.append(book_to_add)
             self.update_data("Data/Books.json", self.catalog.books)
+            print(f"{book_to_add['title']} by {book_to_add['author']} is added.")
         else:
-            print(f"\nThis book is not unique, the ISBN already exist:\n    {book_to_add}\nPlease try again.\n")
-            if new_book is None:
+            print(f"[WARNING] {book_to_add['title']} by {book_to_add['author']} is not added, it's already in our "
+                  f"catalog (duplicate ISBN).")
+            if book_to_add is None:
                 return self.add_book()
 
     def edit_book(self):
@@ -306,21 +310,21 @@ class LibraryAdmin(Person):
             pass
 
     def add_list_of_books(self):
-        """This method will load and add a list of books to the system, all at once using a json file."""
-        instructions = "\n1. Put your json file in the Import folder."
-        print(instructions)
-        file_to_import = input("2. Enter the name of the file you want to import: ").strip()
+        """ This method will load and add a list of books to the system, all at once using a json file. """
+        self.__check_or_create_folder("Import")
+        print("\n1. Put your json file in the Import folder.")
+        file_to_import = input("2. Then enter the name of the file you want to import: ").strip()
         file_type = file_to_import[-5:]
         if file_type != ".json":
             file_to_import += ".json"
         new_books = self.get_data("Import/" + file_to_import)
         if new_books is not None and len(new_books) > 0:
+            print("")
             for book in new_books:
-                self.add_book(new_book=book)
+                self.add_book(book_to_add=book)
         else:
             print(f"Invalid file '{file_to_import}', no data found.")
             return
-        print("Done!")
 
     def add_book_item(self):
         """ Increase the count of available paper copies for a given book in the library's catalog. """
