@@ -82,16 +82,20 @@ class LibraryMember(Person):
                 if self.user_already_borrows_book_item(book_item_to_loan):
                     print("You are already borrowing this book.")
                     return
-            loan_item = LoanItem(self.national_insurance_number, book_item_to_loan)
-            # Update the library's book items.
-            book_item_list_index = self.library.get_book_item_index_by_book_id(book_item_to_loan['ISBN'])
-            self.library.book_items[book_item_list_index]['printed_copies'] -= 1
-            # Update the corresponding json data storage file.
-            self.update_data("Data/BookItems.json", self.library.book_items)
-            # Give user a success notification.
-            print(f"You successfully loaned '{book_item_to_loan['title']}' "
-                  f"by {book_item_to_loan['author']}.")
-            print(f"We expect you to return it before {loan_item.return_date}.")
+            if book_item_to_loan:
+                loan_item = LoanItem(self.national_insurance_number, book_item_to_loan)
+                # Update the library's book items.
+                book_item_list_index = self.library.get_book_item_index_by_book_id(book_item_to_loan['ISBN'])
+                self.library.book_items[book_item_list_index]['printed_copies'] -= 1
+                # Update the corresponding json data storage file.
+                self.update_data("Data/BookItems.json", self.library.book_items)
+                # Give user a success notification.
+                print(f"You successfully loaned '{book_item_to_loan['title']}' "
+                      f"by {book_item_to_loan['author']}.")
+                print(f"We expect you to return it before {loan_item.return_date}.")
+            else:
+                # No book item to loan
+                return
         else:
             print("You are not allowed to borrow more than 3 books, simultaneously.")
             input("Press the enter key on your key board to continue.")

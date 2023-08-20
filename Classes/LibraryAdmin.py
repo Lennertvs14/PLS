@@ -243,37 +243,49 @@ class LibraryAdmin(Person):
     def edit_book(self):
         book_to_edit = self.__get_book_by_user_input()
         books = self.catalog.books
-        for key in book_to_edit:
-            print(f"\nWould you like to edit the {key}?")
-            yes_or_no = input("Enter 1, 2 or 3 to choose:\n [1] Yes\n [2] No\n [3] Stop editing\n-> ").strip()
-            if yes_or_no == "1":
-                value = input(f"Please enter the {key}: ").strip()
-                if Book.validate_field(key, value):
-                    book_to_edit[key] = value
-                else:
-                    print("Invalid input.")
-            if yes_or_no == "3":
-                break
-        print(f"\n{book_to_edit}")
-        self.update_data("Data/Books.json", books)
-        print("\nBook successfully edited!")
+        if books:
+            for key in book_to_edit:
+                print(f"\nWould you like to edit the {key}?")
+                yes_or_no = input("Enter 1, 2 or 3 to choose:\n [1] Yes\n [2] No\n [3] Stop editing\n-> ").strip()
+                if yes_or_no == "1":
+                    value = input(f"Please enter the {key}: ").strip()
+                    if Book.validate_field(key, value):
+                        book_to_edit[key] = value
+                    else:
+                        print("Invalid input.")
+                if yes_or_no == "3":
+                    break
+            print(f"\n{book_to_edit}")
+            self.update_data("Data/Books.json", books)
+            print("\nBook successfully edited!")
+        else:
+            # There are no books in this library catalog yet.
+            pass
 
     def delete_book(self):
         book_to_delete = self.__get_book_by_user_input()
         books = self.catalog.books
-        books.remove(book_to_delete)
-        self.update_data("Data/Books.json", books)
-        print(book_to_delete["title"], "from", book_to_delete["author"], "has been removed from the catalog.")
+        if books:
+            books.remove(book_to_delete)
+            self.update_data("Data/Books.json", books)
+            print(book_to_delete["title"], "from", book_to_delete["author"], "has been removed from the catalog.")
+        else:
+            # There are no books in this library catalog yet.
+            pass
 
     def __get_book_by_user_input(self):
         print("Available books:\n")
         self.catalog.print_all_books()
-        user_input = input("\nEnter a digit of the book you would like to move forward with: ").strip()
-        if user_input.isdigit() and 0 < int(user_input) <= len(self.catalog.books):
-            return self.catalog.books[int(user_input)-1]
+        if self.catalog.books:
+            user_input = input("\nEnter a digit of the book you would like to move forward with: ").strip()
+            if user_input.isdigit() and 0 < int(user_input) <= len(self.catalog.books):
+                return self.catalog.books[int(user_input)-1]
+            else:
+                print("Invalid input, please try again.\n")
+                return self.__get_book_by_user_input()
         else:
-            print("Invalid input, please try again.\n")
-            return self.__get_book_by_user_input()
+            # There are no books in this library catalog yet.
+            pass
 
     def add_list_of_books(self):
         """This method will load and add a list of books to the system, all at once using a json file."""
@@ -296,31 +308,35 @@ class LibraryAdmin(Person):
         """ Increase the count of available paper copies for a given book in the library's catalog. """
         from Classes.BookItem import BookItem
         self.explore_catalog()
-        book_item_id = input("Enter a digit for the book item you'd like to add: ").strip()
-        quantity_to_add = input("Enter a digit for the amount of book items you'd like to add: ").strip()
-        if book_item_id.isdigit() and quantity_to_add.isdigit():
-            if int(book_item_id) <= len(self.library.book_items):
-                # add to a book that already has paper copies.
-                book_item = self.library.book_items[int(book_item_id) - 1]
-                old_quantity = book_item['printed_copies']
-                book_item['printed_copies'] += int(quantity_to_add)
-            elif int(book_item_id) <= len(self.catalog.books):
-                # add to a book that does not have paper copies yet.
-                book_item = BookItem(self.catalog.books[int(book_item_id) - 1], int(quantity_to_add))
-                old_quantity = 0
-                self.library.book_items.append(book_item.get_book_item_data())
-                book_item = book_item.__dict__
+        if self.catalog.books:
+            book_item_id = input("Enter a digit for the book item you'd like to add: ").strip()
+            quantity_to_add = input("Enter a digit for the amount of book items you'd like to add: ").strip()
+            if book_item_id.isdigit() and quantity_to_add.isdigit():
+                if int(book_item_id) <= len(self.library.book_items):
+                    # add to a book that already has paper copies.
+                    book_item = self.library.book_items[int(book_item_id) - 1]
+                    old_quantity = book_item['printed_copies']
+                    book_item['printed_copies'] += int(quantity_to_add)
+                elif int(book_item_id) <= len(self.catalog.books):
+                    # add to a book that does not have paper copies yet.
+                    book_item = BookItem(self.catalog.books[int(book_item_id) - 1], int(quantity_to_add))
+                    old_quantity = 0
+                    self.library.book_items.append(book_item.get_book_item_data())
+                    book_item = book_item.__dict__
+                else:
+                    print("Invalid input, please try again.\n")
+                    return self.add_book_item()
+                self.update_data("Data/BookItems.json", self.library.book_items)
+                book_details = f"'{book_item['title']}' by {book_item['author']}"
+                print(f"Done!"
+                      f"\nThere used to be {old_quantity} paper printed copies, "
+                      f"but there are now {book_item['printed_copies']} paper printed copies available for {book_details}.")
             else:
-                print("Invalid input, please try again.\n")
+                print("Invalid input, inputs must be digits and greater than zero, please try again.\n")
                 return self.add_book_item()
-            self.update_data("Data/BookItems.json", self.library.book_items)
-            book_details = f"'{book_item['title']}' by {book_item['author']}"
-            print(f"Done!"
-                  f"\nThere used to be {old_quantity} paper printed copies, "
-                  f"but there are now {book_item['printed_copies']} paper printed copies available for {book_details}.")
         else:
-            print("Invalid input, inputs must be digits and greater than zero, please try again.\n")
-            return self.add_book_item()
+            # There are no books in this library catalog yet.
+            pass
 
     def edit_book_item(self):
         """ Allow users to modify the details or attributes of a physical copy (book item) of a loaned library' book. """
@@ -348,7 +364,7 @@ class LibraryAdmin(Person):
                 # Unconventional case because the get loan items keeps iterating until one chooses a loan item.
                 pass
         else:
-            # No book items to edit
+            # No book items found
             print("No borrowed books were found, which means there is nothing to edit.")
 
     def __get_loan_item(self):
@@ -382,36 +398,44 @@ class LibraryAdmin(Person):
     def delete_book_item(self):
         """ Decrease the count of available paper copies for a given book in the library's catalog. """
         book_item = self.__get_book_item_by_user_input()
-        old_quantity = book_item['printed_copies']
-        quantity_to_delete = input("Enter a digit for the amount of book items you'd like to delete: ").strip()
-        if quantity_to_delete.isdigit():
-            quantity_to_delete = int(quantity_to_delete)
-            new_quantity = int(old_quantity) - quantity_to_delete
-            if new_quantity >= 0:
-                book_item['printed_copies'] = new_quantity
-                self.update_data("Data/BookItems.json", self.library.book_items)
-                book_details = f"'{book_item['title']}' by {book_item['author']}"
-                print(f"Done!"
-                      f"\nThere used to be {old_quantity} paper printed copies, "
-                      f"but there are now {book_item['printed_copies']} paper printed copies available for {book_details}.")
+        if book_item:
+            old_quantity = book_item['printed_copies']
+            quantity_to_delete = input("Enter a digit for the amount of book items you'd like to delete: ").strip()
+            if quantity_to_delete.isdigit():
+                quantity_to_delete = int(quantity_to_delete)
+                new_quantity = int(old_quantity) - quantity_to_delete
+                if new_quantity >= 0:
+                    book_item['printed_copies'] = new_quantity
+                    self.update_data("Data/BookItems.json", self.library.book_items)
+                    book_details = f"'{book_item['title']}' by {book_item['author']}"
+                    print(f"Done!"
+                          f"\nThere used to be {old_quantity} paper printed copies, "
+                          f"but there are now {book_item['printed_copies']} paper printed copies available for {book_details}.")
+                else:
+                    print(f"Invalid input, "
+                          f"you can't delete more than the existing {old_quantity} book items, "
+                          f"please try again.\n")
+                    return self.delete_book_item()
             else:
-                print(f"Invalid input, "
-                      f"you can't delete more than the existing {old_quantity} book items, "
-                      f"please try again.\n")
+                print("Invalid input, enter a digit that is greater than zero, please try again.\n")
                 return self.delete_book_item()
         else:
-            print("Invalid input, enter a digit that is greater than zero, please try again.\n")
-            return self.delete_book_item()
+            # No book items found
+            pass
 
     def __get_book_item_by_user_input(self):
         print("Available books:\n")
         self.library.print_all_book_items()
-        user_input = input("\nEnter a digit of the book you would like to move forward with: ").strip()
-        if user_input.isdigit() and 0 < int(user_input) <= len(self.library.book_items):
-            return self.library.book_items[int(user_input)-1]
+        if self.library.book_items:
+            user_input = input("\nEnter a digit of the book you would like to move forward with: ").strip()
+            if user_input.isdigit() and 0 < int(user_input) <= len(self.library.book_items):
+                return self.library.book_items[int(user_input)-1]
+            else:
+                print("Invalid input, please try again.\n")
+                return self.__get_book_by_user_input()
         else:
-            print("Invalid input, please try again.\n")
-            return self.__get_book_by_user_input()
+            # There are no book items
+            pass
 
     def check_book_item_status_for_member(self):
         from Classes.LoanItem import LoanItem
