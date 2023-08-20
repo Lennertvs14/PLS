@@ -136,24 +136,32 @@ class LibraryAdmin(Person):
                 self.update_data("Data/Members.json", members)
                 break
 
-    def get_member_by_national_insurance_number(self, members=None, members_are_sorted=False):
+    def get_member_by_national_insurance_number(self, members=None, members_are_sorted=False, member_id=None):
         """
         Returns a member object based on their national insurance number.
 
         :param members: A list of member objects to search.
         :param members_are_sorted: A boolean flag indicating if the list is sorted.
+        :param member_id: A national insurance number of the member to look for.
         :return: A member object if found, otherwise None.
         """
+        # Get sorted member list and check the parameters
         if members is None:
             sorted_members = sorted(self.get_data("Data/Members.json"), key=lambda m: int(m["Number"]))
         elif not members_are_sorted:
             sorted_members = sorted(members, key=lambda m: int(m["Number"]))
         else:
             sorted_members = members
-        self.print_all_members(sorted_members)
         try:
-            member_id = int(input("Give the identity of the user you would like to move forward with: ").strip())
+            # Get member identity
+            if member_id is None:
+                self.print_all_members(sorted_members)
+                member_id = int(input("Give the identity of the user you would like to move forward with: ").strip())
+            else:
+                member_id = int(member_id)
+            # Validate member identity
             if 0 < member_id <= sorted_members[-1]['Number']:
+                # Get & return member
                 member = self.binary_search_for_member_by_national_insurance_number(sorted_members, 0, len(sorted_members), member_id)
                 return member
             else:
@@ -277,17 +285,19 @@ class LibraryAdmin(Person):
         print("Done!")
 
     def add_book_item(self):
+        """ Increase the count of available paper copies for a given book in the library's catalog. """
         from Classes.BookItem import BookItem
         self.explore_catalog()
         book_item_id = input("Enter a digit for the book item you'd like to add: ").strip()
         quantity_to_add = input("Enter a digit for the amount of book items you'd like to add: ").strip()
-        book_item_id_is_digit = book_item_id.isdigit() and int(book_item_id) > -1
-        if book_item_id_is_digit:
+        if book_item_id.isdigit() and quantity_to_add.isdigit():
             if int(book_item_id) <= len(self.library.book_items):
+                # add to a book that already has paper copies.
                 book_item = self.library.book_items[int(book_item_id) - 1]
                 old_quantity = book_item['printed_copies']
                 book_item['printed_copies'] += int(quantity_to_add)
             elif int(book_item_id) <= len(self.catalog.books):
+                # add to a book that does not have paper copies yet.
                 book_item = BookItem(self.catalog.books[int(book_item_id) - 1], int(quantity_to_add))
                 old_quantity = 0
                 self.library.book_items.append(book_item.get_book_item_data())
@@ -301,32 +311,89 @@ class LibraryAdmin(Person):
                   f"\nThere used to be {old_quantity} paper printed copies, "
                   f"but there are now {book_item['printed_copies']} paper printed copies available for {book_details}.")
         else:
-            print("Invalid input, please try again.\n")
+            print("Invalid input, inputs must be digits and greater than zero, please try again.\n")
             return self.add_book_item()
 
     def edit_book_item(self):
-        book_item_to_edit = self.__get_book_item_by_user_input()
-        print(f"\nWould you like to edit the printed copies?")
-        yes_or_no = input("Enter 1, 2 or 3 to choose:\n [1] Yes\n [2] No\n [3] Exit\n-> ").strip()
-        if yes_or_no == "1":
-            value = input(f"Please enter the new amount of printed copies: ").strip()
-            if value.isdigit() and int(value) > 0:
-                book_item_to_edit['printed_copies'] = int(value)
-                self.update_data("Data/BookItems.json", self.library.book_items)
-                print("\nBook's printed copies are successfully edited!")
+        """ Allow users to modify the details or attributes of a physical copy (book item) of a loaned library' book. """
+        print("This editing functionality allows only the metadata of a borrowed book to be modified.")
+        if self.loan_items:
+            loan_item_to_edit = self.__get_loan_item()
+            if loan_item_to_edit:
+                print(f"    {loan_item_to_edit}")
+                editable_fields = ['loan_date', 'return_date']
+                for key in editable_fields:
+                    print(f"\nWould you like to edit the {key}?")
+                    yes_or_no = input("Enter 1, 2 or 3 to choose:\n [1] Yes\n [2] No\n [3] Stop editing\n-> "). strip()
+                    if yes_or_no == "1":
+                        value = input(f"Please enter the {key}: ").strip()
+                        if Book.validate_field(key, value):
+                            loan_item_to_edit[key] = value
+                        else:
+                            print("Invalid input.")
+                    if yes_or_no == "3":
+                        break
+                print(f"\n{loan_item_to_edit}")
+                self.update_data("Data/LoanItems.json", self.loan_items)
+                print(self.loan_items)
             else:
-                print("Invalid input, the amount of copies must be a positive digit, please try again.")
-                return self.edit_book_item()
+                # Unconventional case because the get loan items keeps iterating until one chooses a loan item.
+                pass
         else:
-            print("There are no other details to edit at a book item, maybe you're looking to alter the book it self?")
+            # No book items to edit
+            print("No borrowed books were found, which means there is nothing to edit.")
+
+    def __get_loan_item(self):
+        self.__display_loan_items()
+        book_item_id = input("Enter a digit to choose: ").strip()
+        if book_item_id.isdigit() and 0 < int(book_item_id) <= len(self.loan_items):
+            return self.loan_items[int(book_item_id)-1]
+        else:
+            print("Invalid input, please try again.\n")
+            return self.edit_book_item()
+
+    def __display_loan_items(self):
+        print(f"{len(self.loan_items)} loaned books are found.")
+        loan_details_strings = []
+        count = 1
+        for loan_item in self.loan_items:
+            member = self.get_member_by_national_insurance_number(member_id=loan_item['borrower'])
+            member_full_name = member['GivenName'] + " " + member['Surname']
+            book_item = loan_item['book_item']
+            title = book_item['title']
+            author = book_item['author']
+            loan_date = loan_item['loan_date']
+            return_date = loan_item['return_date']
+            loan_details = f"   [{count}] Member: {member_full_name} Title: {title}, Author: {author}, " \
+                           f"Loan Date: {loan_date}, Return Date: {return_date}"
+            loan_details_strings.append(loan_details)
+            count += 1
+        loan_entries_string = '\n'.join(loan_details_strings)
+        print(loan_entries_string)
 
     def delete_book_item(self):
-        book_item_to_delete = self.__get_book_item_by_user_input()
-        book_items = self.library.book_items
-        book_items.remove(book_item_to_delete)
-        self.update_data("Data/BookItems.json", book_items)
-        print(book_item_to_delete["title"], "from", book_item_to_delete["author"],
-              "has been removed from the catalog.")
+        """ Decrease the count of available paper copies for a given book in the library's catalog. """
+        book_item = self.__get_book_item_by_user_input()
+        old_quantity = book_item['printed_copies']
+        quantity_to_delete = input("Enter a digit for the amount of book items you'd like to delete: ").strip()
+        if quantity_to_delete.isdigit():
+            quantity_to_delete = int(quantity_to_delete)
+            new_quantity = int(old_quantity) - quantity_to_delete
+            if new_quantity >= 0:
+                book_item['printed_copies'] = new_quantity
+                self.update_data("Data/BookItems.json", self.library.book_items)
+                book_details = f"'{book_item['title']}' by {book_item['author']}"
+                print(f"Done!"
+                      f"\nThere used to be {old_quantity} paper printed copies, "
+                      f"but there are now {book_item['printed_copies']} paper printed copies available for {book_details}.")
+            else:
+                print(f"Invalid input, "
+                      f"you can't delete more than the existing {old_quantity} book items, "
+                      f"please try again.\n")
+                return self.delete_book_item()
+        else:
+            print("Invalid input, enter a digit that is greater than zero, please try again.\n")
+            return self.delete_book_item()
 
     def __get_book_item_by_user_input(self):
         print("Available books:\n")
@@ -354,12 +421,14 @@ class LibraryAdmin(Person):
                 print("    " + book_details)
                 if LoanItem.is_overdue(loan_item['return_date']):
                     days_left_to_return = 0
+                    status = "The book borrower is overdue in returning the book."
                 else:
                     days_left_to_return = (datetime.strptime(loan_item['return_date'], "%Y-%m-%d") - datetime.now()).days
-                status = "not returned yet"
+                    status = "The book is not returned yet."
                 loan_details = f"Loan date: {loan_item['loan_date']}" \
                                f"\n    Status: {status}" \
-                               f"\n    Days left: {days_left_to_return}"
+                               f"\n    Days left: {days_left_to_return}" \
+                               f"\n    Return date: {loan_item['return_date']}"
                 print("    " + loan_details + "\n")
         else:
             print("    The member is currently not borrowing any books.")
@@ -381,11 +450,12 @@ class LibraryAdmin(Person):
             # Workaround to appropriately update the data files
             book_item_list_index = self.library.get_book_item_index_by_book_id(loan_item.book_item['ISBN'])
             self.library.book_items[book_item_list_index]['printed_copies'] -= 1
+            self.loan_items.append(vars(loan_item))
 
     def create_backup(self):
         from Classes.Backup import Backup
         backup_description = str(input("Give the backup a description or leave it empty: "))
-        create_backup = Backup(backup_description)
+        backup = Backup(backup_description)
 
     def restore_backup(self, delete_backup_after=False):
         from Classes.Backup import Backup
