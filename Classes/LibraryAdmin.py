@@ -72,11 +72,11 @@ class LibraryAdmin(Person):
             print("Invalid input, please try again.")
             return self.show_interface()
 
-    def add_member(self, new_member=None):
+    def add_member(self, member_to_add=None):
         members = self.get_data("Data/Members.json")
-        if new_member is None:
-            new_member = self.create_member_by_user_input()
-        members.append(new_member)
+        if member_to_add is None:
+            member_to_add = self.create_member_by_user_input()
+        members.append(member_to_add)
         self.update_data("Data/Members.json", members)
 
     def create_member_by_user_input(self):
@@ -192,34 +192,52 @@ class LibraryAdmin(Person):
 
     def add_list_of_members(self):
         """This method will load and add a list of members to the system, all at once using a csv file."""
-        instructions = "\n1. Put your csv file in the Import folder."
-        print(instructions)
-        file_to_import = input("2. Enter the name of the file you want to import: ").strip()
+        self.__check_or_create_folder("Import")
+        # Instructions
+        print("\n1. Put your CSV file in the Import folder.")
+        print("2. Ensure your first row matches this header exactly, and that the data corresponds:")
+        print("   Number;GivenName;Surname;StreetAddress;ZipCode;City;EmailAddress;Username;Password;TelephoneNumber")
+        file_to_import = input("3. Now enter the name of the file you want to import: ").strip()
+        print("")
+        # Validate file name
         file_type = file_to_import[-4:]
         if file_type != ".csv":
             file_to_import += ".csv"
-        new_members = self.__get_data_from_csv_file("Import/" + file_to_import)
+        # Retrieve member objects
+        new_members = self.read_csv_to_dict("Import/" + file_to_import)
         if new_members is not None and len(new_members) > 0:
+            # Add to library system
             for member in new_members:
                 if LibraryMember.validate_username(member['Username']):
-                    member.pop('Number')
                     member['Number'] = self.get_new_national_insurance_number()
-                    self.add_member(new_member=member)
+                    self.add_member(member_to_add=member)
+                    print(f"{member['GivenName']} {member['Surname']} is added.")
                 else:
-                    print(f"    [WARNING] '{member['GivenName']}' is not added to the library system.")
+                    print(f" [WARNING] '{member['GivenName']}' is not added to the library system.")
         else:
             print(f"Invalid file '{file_to_import}', no data found.")
             return
-        print("Done!")
 
-    def __get_data_from_csv_file(self, file_path):
+    def __check_or_create_folder(self, folder_name):
+        import os
+        if not os.path.exists(folder_name):
+            os.makedirs(folder_name)
+            print(f"Folder '{folder_name}' created.")
+        else:
+            print(f"Folder '{folder_name}' already exists.")
+
+    def read_csv_to_dict(self, csv_file):
         import csv
-        try:
-            with open(file_path) as file:
-                items = list(csv.DictReader(file, delimiter=";"))
-            return items
-        except Exception as e:
-            print(f"Invalid file path {file_path}.")
+        data_dict_list = []
+        with open(csv_file, 'r') as file:
+            reader = csv.reader(file, delimiter=';')
+            headers = next(reader)  # Read and skip the header row
+            for row in reader:
+                data_dict = {}
+                for i, value in enumerate(row):
+                    data_dict[headers[i]] = value
+                data_dict_list.append(data_dict)
+        return data_dict_list
 
     def add_book(self, new_book=None):
         if new_book is None:

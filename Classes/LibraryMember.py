@@ -180,13 +180,16 @@ class LibraryMember(Person):
         if username_is_lowercase and username_is_unique:
             return True
         else:
-            print("    Username must be lowercase and unique!")
+            print("    - Username must be lowercase and unique!")
             return False
 
     @staticmethod
     def __get_member_usernames():
-        file_path = "Data/Members.json"
-        with open(file_path) as file:
-            members = json.load(file)
-        usernames = [member["Username"] for member in members]
-        return usernames
+        try:
+            file_path = "Data/Members.json"
+            with open(file_path) as file:
+                members = json.load(file)
+            usernames = [member["Username"] for member in members]
+            return usernames
+        except:
+            return []
