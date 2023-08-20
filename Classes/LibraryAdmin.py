@@ -102,39 +102,44 @@ class LibraryAdmin(Person):
     def delete_member(self):
         sorted_members = sorted(self.get_data("Data/Members.json"), key=lambda m: int(m["Number"]))
         member_to_delete = self.get_member_by_national_insurance_number(sorted_members, True)
-        sorted_members.remove(member_to_delete)
-        self.update_data("Data/Members.json", sorted_members)
+        if member_to_delete:
+            sorted_members.remove(member_to_delete)
+            self.update_data("Data/Members.json", sorted_members)
 
     def print_all_members(self, members=None):
         if members is None:
             members = self.get_data("Data/Members.json")
-        for member in members:
-            member_full_name = member['GivenName'] + " " + member['Surname']
-            print(f"[{member['Number']}] {member_full_name}")
+        if members:
+            for member in members:
+                member_full_name = member['GivenName'] + " " + member['Surname']
+                print(f"[{member['Number']}] {member_full_name}")
+        else:
+            print("There are no members registered to this library yet.")
 
     def edit_member(self):
         member_to_edit = self.get_member_by_national_insurance_number()
-        member_to_edit_identity = member_to_edit['Number']
-        member_to_edit.pop('Number')
-        for key in member_to_edit:
-            print(f"Would you like to edit the {key}?")
-            yes_or_no = input("Enter 1, 2 or 3 to choose:\n [1] Yes\n [2] No\n [3] Exit\n-> ").strip()
-            if yes_or_no == "1":
-                value = input(f"Please enter the {key}: ")
-                if LibraryMember.validate_field(key, value):
-                    member_to_edit[key] = value
-                else:
-                    print("Invalid input.")
-            if yes_or_no == "3":
-                break
-        member_to_edit['Number'] = member_to_edit_identity
-        print(f"\n{member_to_edit}")
-        members = self.get_data("Data/Members.json")
-        for i, member in enumerate(members):
-            if member["Number"] == member_to_edit["Number"]:
-                members[i] = member_to_edit
-                self.update_data("Data/Members.json", members)
-                break
+        if member_to_edit:
+            member_to_edit_identity = member_to_edit['Number']
+            member_to_edit.pop('Number')
+            for key in member_to_edit:
+                print(f"Would you like to edit the {key}?")
+                yes_or_no = input("Enter 1, 2 or 3 to choose:\n [1] Yes\n [2] No\n [3] Exit\n-> ").strip()
+                if yes_or_no == "1":
+                    value = input(f"Please enter the {key}: ")
+                    if LibraryMember.validate_field(key, value):
+                        member_to_edit[key] = value
+                    else:
+                        print("Invalid input.")
+                if yes_or_no == "3":
+                    break
+            member_to_edit['Number'] = member_to_edit_identity
+            print(f"\n{member_to_edit}")
+            members = self.get_data("Data/Members.json")
+            for i, member in enumerate(members):
+                if member["Number"] == member_to_edit["Number"]:
+                    members[i] = member_to_edit
+                    self.update_data("Data/Members.json", members)
+                    break
 
     def get_member_by_national_insurance_number(self, members=None, members_are_sorted=False, member_id=None):
         """
@@ -152,23 +157,26 @@ class LibraryAdmin(Person):
             sorted_members = sorted(members, key=lambda m: int(m["Number"]))
         else:
             sorted_members = members
-        try:
-            # Get member identity
-            if member_id is None:
-                self.print_all_members(sorted_members)
-                member_id = int(input("Give the identity of the user you would like to move forward with: ").strip())
-            else:
-                member_id = int(member_id)
-            # Validate member identity
-            if 0 < member_id <= sorted_members[-1]['Number']:
-                # Get & return member
-                member = self.binary_search_for_member_by_national_insurance_number(sorted_members, 0, len(sorted_members), member_id)
-                return member
-            else:
-                raise ValueError
-        except ValueError:
-            print("Invalid member identity, please try again.")
-            return self.get_member_by_national_insurance_number(sorted_members, True)
+        if sorted_members:
+            try:
+                # Get member identity
+                if member_id is None:
+                    self.print_all_members(sorted_members)
+                    member_id = int(input("\nGive the identity of the user you would like to move forward with: ").strip())
+                else:
+                    member_id = int(member_id)
+                # Validate member identity
+                if 0 < member_id <= sorted_members[-1]['Number']:
+                    # Get & return member
+                    member = self.binary_search_for_member_by_national_insurance_number(sorted_members, 0, len(sorted_members), member_id)
+                    return member
+                else:
+                    raise ValueError
+            except ValueError:
+                print("Invalid member identity, please try again.")
+                return self.get_member_by_national_insurance_number(sorted_members, True)
+        else:
+            print("There are no members registered to this library yet.")
 
     def binary_search_for_member_by_national_insurance_number(self, data, low, high, value):
         if low > high:
@@ -409,29 +417,33 @@ class LibraryAdmin(Person):
         from Classes.LoanItem import LoanItem
         from datetime import datetime
         # Get member to check for
-        print("Choose the member:")
-        member = self.__convert_member_from_dict_to_instance(self.get_member_by_national_insurance_number())
-        # Get the member's borrowed books
-        borrowed_books = member.borrowed_books
-        if borrowed_books is not None and len(borrowed_books) > 0:
-            # Show book item status foreach borrowed book
-            print("The member is borrowing these books:")
-            for loan_item in borrowed_books:
-                book_details = f"'{loan_item['book_item']['title']}' by {loan_item['book_item']['author']}"
-                print("    " + book_details)
-                if LoanItem.is_overdue(loan_item['return_date']):
-                    days_left_to_return = 0
-                    status = "The book borrower is overdue in returning the book."
-                else:
-                    days_left_to_return = (datetime.strptime(loan_item['return_date'], "%Y-%m-%d") - datetime.now()).days
-                    status = "The book is not returned yet."
-                loan_details = f"Loan date: {loan_item['loan_date']}" \
-                               f"\n    Status: {status}" \
-                               f"\n    Days left: {days_left_to_return}" \
-                               f"\n    Return date: {loan_item['return_date']}"
-                print("    " + loan_details + "\n")
+        member_obj = self.get_member_by_national_insurance_number()
+        if member_obj:
+            member = self.__convert_member_from_dict_to_instance(member_obj)
+            # Get the member's borrowed books
+            borrowed_books = member.borrowed_books
+            if borrowed_books is not None and len(borrowed_books) > 0:
+                # Show book item status foreach borrowed book
+                print("The member is borrowing these books:")
+                for loan_item in borrowed_books:
+                    book_details = f"'{loan_item['book_item']['title']}' by {loan_item['book_item']['author']}"
+                    print("    " + book_details)
+                    if LoanItem.is_overdue(loan_item['return_date']):
+                        days_left_to_return = 0
+                        status = "The book borrower is overdue in returning the book."
+                    else:
+                        days_left_to_return = (datetime.strptime(loan_item['return_date'], "%Y-%m-%d") - datetime.now()).days
+                        status = "The book is not returned yet."
+                    loan_details = f"Loan date: {loan_item['loan_date']}" \
+                                   f"\n    Status: {status}" \
+                                   f"\n    Days left: {days_left_to_return}" \
+                                   f"\n    Return date: {loan_item['return_date']}"
+                    print("    " + loan_details + "\n")
+            else:
+                print("    The member is currently not borrowing any books.")
         else:
-            print("    The member is currently not borrowing any books.")
+            # There are no members registered to this library yet
+            pass
 
     def __convert_member_from_dict_to_instance(self, member_dict):
         member_instance = LibraryMember(**member_dict)
@@ -440,17 +452,20 @@ class LibraryAdmin(Person):
     def lend_book_item_to_member(self):
         from Classes.LoanItem import LoanItem
         # Get user to loan with
-        print("Choose the member:")
         get_member = self.get_member_by_national_insurance_number()
-        member = self.__convert_member_from_dict_to_instance(get_member)
-        # Choose book item and loan it
-        print("Choose the book to lend:")
-        loan_item = member.borrow_book_item(True)
-        if isinstance(loan_item, LoanItem):
-            # Workaround to appropriately update the data files
-            book_item_list_index = self.library.get_book_item_index_by_book_id(loan_item.book_item['ISBN'])
-            self.library.book_items[book_item_list_index]['printed_copies'] -= 1
-            self.loan_items.append(vars(loan_item))
+        if get_member:
+            member = self.__convert_member_from_dict_to_instance(get_member)
+            # Choose book item and loan it
+            print("Choose the book to lend:")
+            loan_item = member.borrow_book_item(True)
+            if isinstance(loan_item, LoanItem):
+                # Workaround to appropriately update the data files
+                book_item_list_index = self.library.get_book_item_index_by_book_id(loan_item.book_item['ISBN'])
+                self.library.book_items[book_item_list_index]['printed_copies'] -= 1
+                self.loan_items.append(vars(loan_item))
+        else:
+            # There are no members registered to this library yet
+            pass
 
     def create_backup(self):
         from Classes.Backup import Backup

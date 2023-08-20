@@ -11,14 +11,20 @@ class Person(LibrarySystem):
         """ This function leverages the fact that only administrators add users,
         and thus that member numbers are sequentially ordered. """
         member_identities = self.__get_members_national_insurance_numbers()
-        return max(member_identities) + 1
+        if member_identities:
+            return max(member_identities) + 1
+        else:
+            return 1
 
     def __get_members_national_insurance_numbers(self):
-        file_path = "Data/Members.json"
-        with open(file_path) as file:
-            members = json.load(file)
-        member_identities = {obj['Number'] for obj in members}
-        return member_identities
+        try:
+            file_path = "Data/Members.json"
+            with open(file_path) as file:
+                members = json.load(file)
+            member_identities = {obj['Number'] for obj in members}
+            return member_identities
+        except:
+            return []
 
     def explore_catalog(self):
         """ This function shows all the books from the catalog. """
