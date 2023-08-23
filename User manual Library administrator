@@ -1,6 +1,7 @@
-Welcome to the user manual for library administrators of this Public Library System! (Made by Lennert & Jasper)
+Welcome to the user manual for library administrators of this Public Library System!
 
 When you first launch the system you will be greeted and you will be asked to login using your username and password.
+The log in screen will look as the following:
 ---------------------------------------------------
 Welcome!
 
@@ -8,20 +9,27 @@ Enter your username:
 Enter your password: 
 ---------------------------------------------------
 
-Hit enter everytime after you put in your requested answer. For example: 
+Press enter if you finished your input and would like to establish your answer. For example:
 ------------------------------------------- 
-Enter your username: blabla1999 (hit enter) 
+Enter your username: your-username
 -------------------------------------------
 
-If you are the librarian, you can login with username = admin and password = admin123 to unlock all functionalities.
+Now press enter and do the same for the password. For example:
+-------------------------------------------
+Enter your password: your-password123
+-------------------------------------------
+
+Now if you filled in the correct credentials, you should be logged in and see a new screen.
+
+NOTES:
+1. If you are the librarian, you can login with username = admin and password = admin123 to unlock all functionalities.
 Otherwise if you are a member, you can login with your assigned username and password.
+2. All functionalities will be rather self-explanatory, but this manual will describe everything in more detail.
+3. Disclaimer: Book = information of a book, abstract concept of a book in the catalog.
+               Book item = physical copy of a book in the library
+4. In contrary with a Member, as a Librarian you have a lot more functionalities and access to data of the PLS.
 
-All functionalities will be rather self-explanatory, but this manual will describe everything in more detail for your understanding of the PLS.
-
-Disclaimer: Book = information of a book, abstract concept of a book in the catalog. 
-            Book item = physical copy of a book in the library
-
-In contrary with a Member, as a Librarian you have a lot more functionalities and access to data of the PLS.
+The base for each functionality explanation is this screen:
 -----------------------------------------------------------------------------
 What would you like to do?
  [1] Explore members
@@ -46,24 +54,26 @@ What would you like to do?
  [20] Restore backup
  [21] Restore and remove backup
 -----------------------------------------------------------------------------
-MEMBERS
+
+MEMBER RELATED FUNCTIONALITIES:
 
 1 - Print a list of all current members of the PLS.
+  1a. Hit '1' on your keyboard and press enter after.
+  1b. The list of members will be printed by now, and if their are no registered members it will notify you.
 
-2 - If a person would like to be a member, you can use this function to add a member. You will run into a list of details you can enter to register this person's info. 
-An example of how a member looks in the database:
-------------------------------------------------
-    "Number": 1,                           (is automatically generated when finished entering the details)
-    "GivenName": "Hisham",
-    "Surname": "Altink",
-    "StreetAddress": "Borkelsedijk 53",
-    "ZipCode": "5571 GA",
-    "City": "Bergeijk",
-    "EmailAddress": "hishamaltink@teleworm.us",
-    "Username": "reech1950",
-    "Password": "fgr5d4",
-    "TelephoneNumber": "06-16898224"
-------------------------------------------------
+2 - If a person would like to be a member, you (an admin) can use this function to add a member.
+    You will run into a list of details you can enter to register this person's info.
+  2a. Hit '2' on your keyboard and press enter after.
+  2b. It'll ask you the name of the city where the user lives. Please fill it in and press enter afterwards.
+  2c. It'll ask you the user's email address, note: it has to be a valid email such as: gmail, hotmail etc. Please fill it in and press enter afterwards.
+  2d. It'll ask you the user's given name, please fill it in and press enter afterwards.
+  2e. It'll ask you what the password for the user should be, please fill it in and press enter afterwards.
+  2f. It'll ask you the user's street address, please fill it in and press enter afterwards.
+  2g. It'll ask you the user's surname, please fill it in and press enter afterwards.
+  2h. It'll ask you the telephone number, please fill it in and press enter afterwards.
+  2i. It'll ask you what hte username for the user should be, NOTE: it has to be a unique lowercase username. Please fill it in and press enter afterwards.
+  2j. It'll ask you the zip code, please fill it in and press enter afterwards.
+  2k. Now the user is added to the member's list and saved within this system.
 
 3 - Edit a specific member's information. you can select this option to do that. You will see the list of members and it will ask you to enter the digit of the person you would to edit. It will ask you for every detail if you would like to change it, like so:
 ----------------------------------------------
