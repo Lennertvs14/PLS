@@ -1,8 +1,7 @@
 Welcome to the user manual for members of this Public Library System! (made by Lennert & Jasper)
 
-
-
-When you first launch the system you will be greeted and you will be asked to login using your username and password:
+When you first launch the system you will be greeted and you will be asked to login using your username and password.
+The log in screen will look as the following:
 ---------------------------------------------------
 Welcome!
 
@@ -10,17 +9,22 @@ Enter your username:
 Enter your password: 
 ---------------------------------------------------
 
-Hit enter everytime after you put in your requested answer. For example:
+Press enter if you finished your input and would like to establish your answer. For example:
+------------------------------------------- 
+Enter your username: your-username
 -------------------------------------------
-Enter your username: blabla1999 (hit enter)
+
+Now press enter and do the same for the password. For example:
+-------------------------------------------
+Enter your password: your-password123
 -------------------------------------------
 
-All functionalities will be rather self-explanatory, but this manual will describe everything in more detail for your understanding of the PLS.
+NOTES
+  1. All functionalities will be rather self-explanatory, but this manual will describe everything in more detail for your understanding of the PLS.
+  2. Disclaimer: Book = information of a book, abstract concept of a book in the catalog. 
+                 Book item = physical copy of a book in the library
 
-Disclaimer: Book = information of a book, abstract concept of a book in the catalog. 
-            Book item = physical copy of a book in the library
-
-As a Member you only have limited functionalities: 
+As a Member you only have the following functionalities: 
 ---------------------------------------------------
 What would you like to do?
  [1] Explore catalog
@@ -30,15 +34,49 @@ What would you like to do?
  [5] Loan book item
  [6] Return book item
 ---------------------------------------------------
+
 [1] - Explore the catalog of the PLS and look through all the books we have in store for you. this will provide a list of all books.
+  1a. Hit '1' on your keyboard and press enter after.
+  1b. It'll show you a complete list of all the books that are in the current catalog, in this format, [n] *title* by *author*.
 
-2 - If you would like to search for a specific book, you can use this function to search for your book by title or by author. (not case sensitive)
+[2] - If you would like to search for a specific book, you can use this function to search for your book by title or by author. (not case sensitive)
+  2a. Hit '2' on your keyboard and press enter after.
+  2b. It'll ask you to enter a book title or author.
+  2c. It'll show you a complete list of all the books that are in the current catalog that meet the input that was given in previous step. 
+       in this format, *title* by *author*.
 
-3 - Explore the actual library of the PLS and look through all the books items we have in store for you. this will provide a list of all physical copies that are available in store.
+[3] - Explore the actual library of the PLS and look through all the books items we have in store for you. this will provide a list of all physical copies that are available in store.
+  3a. Hit '3' on your keyboard and press enter after.
+  3b. It'll show you a complete list of all the books items that are in the current library, in this format, [n] *count available book items*x - *title* by *author*.
 
-4 - If you would like to search for a specific book item, you can use this function to search for your book item by title or by author and see how many copies are left in the library. (not case sensitive)
+[4] - If you would like to search for a specific book item, you can use this function to search for your book item by title or by author and see how many copies are left in the library. (not case sensitive)
+  4a. Hit '4' on your keyboard and press enter after.
+  4b. It'll ask you to enter a book title or author.
+  4c. It'll show you a complete list of all the book items that are in the current library that meet the input that was given in previous step. 
+       in this format, [*count available book items*] *title* by *author*.
 
-5 - If you consider loaning a book from the library, select this option and give the id to loan the book you want.
+[5] - If you consider loaning a book item from the library, select this option and give the id to loan the book item you want.
+  5a. Hit '5' on your keyboard and press enter after.
+  5c. It'll ask you the digit of the book item you would like to move forward with.
+  5c. If it all went successfully you would see a message like:
+------------------------------------------------------
+You successfully loaned *title* by *author*.
+We expect you to return it before 2023-10-13.
+------------------------------------------------------
+  5d. Then it'll create an entry of a loan item in the database.
 
-6 - If you want to return a book you loaned from the library, select this option and select the id of the book you want to return.
+[6] - If you want to return a book you loaned from the library, select this option and select the id of the book you want to return.
 If you have no books to return, you will receive a message that says "You have no book to return".
+  6a. Hit '6' on your keyboard and press enter after.
+  6b. It'll show you a list of all book items you are currently borrowing, like this:
+----------------------------------------------------------------------------
+Your borrowed books:
+   [1] 'Absalom, Absalom!' by William Faulkner.
+   [2] 'Berlin Alexanderplatz' by Alfred Döblin.
+Give the identity of the book you would like to move forward with:
+----------------------------------------------------------------------------
+  6c. Enter the digit of the book you would like to return and hit enter.
+  6d. If went successfully, it will show you the following message:
+--------------------------------------------------------------------------
+You successfully returned *title* by *author*.
+--------------------------------------------------------------------------

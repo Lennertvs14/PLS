@@ -57,11 +57,11 @@ What would you like to do?
 
 MEMBER RELATED FUNCTIONALITIES:
 
-1 - Print a list of all current members of the PLS.
+[1] - Print a list of all current members of the PLS.
   1a. Hit '1' on your keyboard and press enter after.
   1b. The list of members will be printed by now, and if their are no registered members it will notify you.
 
-2 - If a person would like to be a member, you (an admin) can use this function to add a member.
+[2] - If a person would like to be a member, you (an admin) can use this function to add a member.
     You will run into a list of details you can enter to register this person's info.
   2a. Hit '2' on your keyboard and press enter after.
   2b. It'll ask you the name of the city where the user lives. Please fill it in and press enter afterwards.
@@ -75,7 +75,7 @@ MEMBER RELATED FUNCTIONALITIES:
   2j. It'll ask you the zip code, please fill it in and press enter afterwards.
   2k. Now the user is added to the member's list and saved within this system.
 
-3 - Edit a specific member's information. you can select this option to do that. You will see the list of members and it will ask you to enter the digit of the person you would to edit. It will ask you for every detail if you would like to change it, like so:
+[3] - Edit a specific member's information. you can select this option to do that. You will see the list of members and it will ask you to enter the digit of the person you would to edit. It will ask you for every detail if you would like to change it, like so:
 ----------------------------------------------
 Would you like to edit the ..........?
 Enter 1, 2 or 3 to choose:
@@ -83,78 +83,231 @@ Enter 1, 2 or 3 to choose:
  [2] No
  [3] Exit   (if you choose this option you will exit of the edit and return to the home screen.)
 ----------------------------------------------
+  3a. Hit '3' on your keyboard and press enter after.
+  3b. You will see a list of users you can choose from, please enter the digit in front of their name to continue.
+  3c. It'll ask you if you would like to edit the given name, 
+    - enter [1] to continue to the edit, enter the value you want to replace the current value with and press enter.
+    - enter [2] to move on to the next value of that user's information.
+    - enter [3] to exit the edit screen and update the value changes you made of that user in the database.
+  3d. You will be asked every single piece of information that belongs to that user and give you the same options as previous point (3c).
+    the list of information contains the following in this particular order:
+      - Given name
+      - Surname
+      - Street Address
+      - Zip code
+      - City
+      - Email address
+      - Username
+      - Password
+      - Telephone number
+      - Number (id) CAUTION: be careful with changing this number as it can affect the database functionality and might break the application.
+  3e. Now the information of this user will be updated to the database.
 
-4 -  Delete a member from the database. It will ask you to enter the digit of the member from the list you would like to remove. After entering the digit and hitting enter, it will delete that member.
+[4] -  Delete a member from the database. It will ask you to enter the digit of the member from the list you would like to remove. After entering the digit and hitting enter, it will delete that member.
+  4a. Hit '4' on your keyboard and press enter after.
+  4b. You will see a list of users you can choose from, please enter the digit in front of their name to delete that user.
+  4c. This user will be removed from the database.
 
-5 -  See the loan items from a specific member. It will ask you to enter the digit of the member from the list you would like to see the loan items. After you entered the digit, it will show you all the book items the member has loaned with a status of "returned" or "not returned". 
+[5] -  See the loan items from a specific member. It will ask you to enter the digit of the member from the list you would like to see the loan items. After you entered the digit, it will show you all the book items the member has loaned with a status of "returned" or "not returned". 
+  5a. Hit '5' on your keyboard and press enter after.
+  5b. You will see a list of users you can choose from, please enter the digit in front of their name to see their all status of current loaned book items.
+  5c. You will see either:
+    - The member is currently not borrowing any books.
+    - Every book's name with the current status belonging to that loan item.
+  
 
-6 - Add a list of members to the database. It will ask you to make sure the file you want to import in the Import folder and has the type .csv . Only csv files can be added using this functionality. If that is made sure, you will enter the name of the file and hit enter to import the new members with the current ones. If the name is not correct, it will return a message that says "invalid file path".
+[6] - Add a list of members to the database. It will ask you to make sure the file you want to import in the Import folder and has the type .csv . Only csv files can be added using this functionality. If that is made sure, you will enter the name of the file and hit enter to import the new members with the current ones. If the name is not correct, it will return a message that says "invalid file path".
+  6a. Hit '6' on your keyboard and press enter after.
+  6b. It'll show you the following screen if you have never imported anything, otherwise the first sentence will say that the folder already exists.
+-------------------------------------------------------------------------------------------------------------
+Folder 'Import' created.
+
+1. Put your CSV file in the Import folder.
+2. Ensure your first row matches this header exactly, and that the data corresponds:
+   Number;GivenName;Surname;StreetAddress;ZipCode;City;EmailAddress;Username;Password;TelephoneNumber
+3. Now enter the name of the file you want to import: ___________
+
+-------------------------------------------------------------------------------------------------------------
+  6c. Please enter the exact name of the *.csv file you want to import.
+  6d. This list of users will be added to the current database.
 
 CATALOG
 
-7 - Explore the catalog of the PLS and look through all the books we have in store for you. this will provide a list of all books.
+[7] - Explore the catalog of the PLS and look through all the books we have in store for you. this will provide a list of all books.
+  7a. Hit '7' on your keyboard and press enter after.
+  7b. It'll show you a complete list of all the books that are in the current catalog, in this format, [n] *title* by *author*.
 
-8 - Add a book. it will ask you every detail of a book and checks if the length of an ISBN is 13 digits long. After entering every detail the book will be created and will be added to the catalog. (not the library)
+[8] - Add a book. it will ask you every detail of a book and checks if the length of an ISBN is 13 digits long. After entering every detail the book will be created and will be added to the catalog. (not the library)
+  8a. Hit '8' on your keyboard and press enter after.
+  8b. Please make sure this is a legitimate book and enter every detail like this:
+---------------------------------------------------------------------------
+    Please enter the ISBN: 9788834500433
+    Please enter the author: William Faulkner
+    Please enter the country: United States
+    Please enter the imageLink: images/absalom-absalom.jpg
+    Please enter the language: English
+    Please enter the link: https://en.wikipedia.org/wiki/Absalom,_Absalom!\n
+    Please enter the pages: 313
+    Please enter the title: Absalom, Absalom!
+    Please enter the year: 1936
 ----------------------------------------------------------------------------
-    "author": "William Faulkner",
-    "country": "United States",
-    "imageLink": "images/absalom-absalom.jpg",
-    "language": "English",
-    "link": "https://en.wikipedia.org/wiki/Absalom,_Absalom!\n",
-    "pages": 313,
-    "title": "Absalom, Absalom!",
-    "ISBN": "9788834500433",
-    "year": 1936
-----------------------------------------------------------------------------
+  8c. If you have entered every piece of information, this book will be added to the catalog.
 
-9 -  Edit a specific book's information. you can select this option to do that. You will see the list of books and it will ask you to enter the id of the book you would to edit. It will ask you for every detail if you would like to change it, like so:
+[9] -  Edit a specific book's information. you can select this option to do that. You will see the list of books and it will ask you to enter the id of the book you would to edit. 
+  9a. Hit '9' on your keyboard and press enter after.
+  9b. It'll ask you to enter a digit of the book you would like to move forward with.
+  9c. It'll ask you for every detail if you would like to change it, like so:
 ----------------------------------------------
-Would you like to edit the ..........?
-Enter 1, 2 or 3 to choose:
- [1] Yes
- [2] No
- [3] Exit   (if you choose this option you will exit of the edit and return to the home screen.)
+  Would you like to edit the ..........?
+  Enter 1, 2 or 3 to choose:
+  [1] Yes
+  [2] No
+  [3] Exit  
 ----------------------------------------------
-if you select Yes, it asks you the give the information you would to edit it into. If you select No, it will continue to the next detail.
+    - enter [1] to continue to the edit, enter the value you want to replace the current value with and press enter.
+    - enter [2] to move on to the next value of that book's information.
+    - enter [3] to exit the edit screen and update the value changes you made of that book in the database.
+  9d. You will be asked every single piece of information that belongs to that book and give you the same options as previous point (3c).
+    the list of information contains the following in this particular order:
+      - Author
+      - Country
+      - Image link
+      - Language
+      - Link
+      - Pages
+      - Title
+      - ISBN
+      - Year
+  9e. Now the information of this book will be updated to the database.
 
-10 - Delete a book from the database. It will ask you to enter the digit of the book from the list you would like to move forward with. After entering the digit and hitting enter, it will delete that book.
+[10] - Delete a book from the database. It will ask you to enter the digit of the book from the list you would like to move forward with. After entering the digit and hitting enter, it will delete that book.
+  10a. Hit '10' on your keyboard and press enter after.
+  10b. You will see a list of books you can choose from, please enter the digit in front of the name to delete that book.
+  10c. This book will be removed from the database.
 
-11 - If you would like to search for a specific book, you can use this function to search for your book by title or by author. (not case sensitive)
+[11] - If you would like to search for a specific book, you can use this function to search for your book by title or by author. (not case sensitive)
+  11a. Hit '11' on your keyboard and press enter after.
+  11b. It'll ask you to enter a book title or author.
+  11c. It'll show you a complete list of all the books that are in the current catalog that meet the input that was given in previous step. 
+       in this format, *title* by *author*.
+  
 
-12 - Add a list of books to the database. It will ask you to make sure the file you want to import in the Import folder and has the type .json . Only json files can be added using this functionality. If that is made sure, you will enter the name of the file and hit enter to import the new members with the current ones. If the name is not correct, it will return a message that says "invalid file path".
+[12] - Add a list of books to the database. It will ask you to make sure the file you want to import in the Import folder and has the type .json . Only json files can be added using this functionality. If that is made sure, you will enter the name of the file and hit enter to import the new members with the current ones. If the name is not correct, it will return a message that says "invalid file path".
+  12a. Hit '12' on your keyboard and press enter after.
+  12b. It'll show you the following screen if you have never imported anything, otherwise the first sentence will say that the folder already exists.
+-------------------------------------------------------------------------------------------------------------
+Folder 'Import' created. (or already exists)
+
+1. Put your json file in the Import folder.
+2. Then enter the name of the file you want to import: ___________
+-------------------------------------------------------------------------------------------------------------
+  12c. Please enter the exact name of the *.json file you want to import.
+  12d. This list of books will be added to the current catalog in the database.
 
 LIBRARY
 
-13 - Explore the actual library of the PLS and look through all the books items we have in store for you. this will provide a list of all physical copies that are available in store.
+[13] - Explore the actual library of the PLS and look through all the books items we have in store for you. this will provide a list of all physical copies that are available in store.
+  13a. Hit '13' on your keyboard and press enter after.
+  13b. It'll show you a complete list of all the books items that are in the current library, in this format, [n] *count available book items*x - *title* by *author*.
 
-14 - Add a book item. If you would like to create more copies of a specific book, you can use this function. it will ask you to enter a digit to choose a book item and it will ask you ow many copies you would like to add, for example:
+[14] - Add a book item. If you would like to create more copies of a specific book, you can use this function. it will ask you to enter a digit to choose a book item and it will ask you how many copies you would like to add, for example:
+  14a. Hit '14' on your keyboard and press enter after.
+  14b. Enter a digit for the book item you'd like to add and how many items you would like to add, just like below:
 ---------------------------------------------------------------------
 Enter a digit for the book item you'd like to add: 1
 Enter a digit for the amount of book items you'd like to add: 1
 ---------------------------------------------------------------------
+  14c. if gone successfull, it will print the following message:
+--------------------------------------------------------------------------------------------------------------------------------------
+There used to be 5 paper printed copies, but there are now 6 paper printed copies available for *title* by *author*.
+--------------------------------------------------------------------------------------------------------------------------------------
 
-15 -  Edit a specific book item's information. you can select this option to do that. You will see the list of book items and it will ask you to enter the digit of the book you would to edit. It will ask you for every detail if you would like to change it, like so:
+[15] -  Edit a specific book item's information. you can select this option to do that. You will see the list of book items and it will ask you to enter the digit of the book you would to edit. It will ask you for every detail if you would like to change it, like so:
+  15a. Hit '15' on your keyboard and press enter after.
+  15b. It'll ask you to enter a digit of the book item you would like to move forward with. 
+      (if there are no book items currently being loaned then it will say: 
+      This editing functionality allows only the metadata of a borrowed book to be modified.
+      No borrowed books were found, which means there is nothing to edit.)
+  15c. It'll ask you for every detail if you would like to change it, like so:
 ----------------------------------------------
-Would you like to edit the ..........?
-Enter 1, 2 or 3 to choose:
- [1] Yes
- [2] No
- [3] Exit   (if you choose this option you will exit of the edit and return to the home screen.)
+  Would you like to edit the ..........?
+  Enter 1, 2 or 3 to choose:
+  [1] Yes
+  [2] No
+  [3] Exit  
 ----------------------------------------------
-if you select Yes, it asks you the give the information you would to edit it into. If you select No, it will continue to the next detail.
+    - enter [1] to continue to the edit, enter the value you want to replace the current value with and press enter.
+    - enter [2] to move on to the next value of that book's information.
+    - enter [3] to exit the edit screen and update the value changes you made of that book in the database.
+  15d. You will be asked every single piece of information that belongs to that book and give you the same options as previous point (3c).
+    the list of information contains the following in this particular order:
+      - Author
+      - Country
+      - Image link
+      - Language
+      - Link
+      - Pages
+      - Title
+      - ISBN
+      - Year
+  15e. Now the information of this book will be updated to the database.
 
-16 - Delete a book item from the database. It will ask you to enter the title or author of the book you would like to move remove a copy from. After entering the title or author and hitting enter,(if found) it will delete a copy of that book (1 book item).
+[16] - Delete a book item from the database. It will ask you to enter the title or author of the book you would like to move remove a copy from. After entering the title or author and hitting enter,(if found) it will delete a copy of that book (1 book item).
+  16a. Hit '16' on your keyboard and press enter after.
+  16b. You will see a list of books items you can choose from, please enter the digit in front of the name to delete a copy that book item.
+  16c. This book item will be removed from the database.
 
-17 - If you would like to search for a specific book item, you can use this function to search for your book item by title or by author and see how many copies are left in the library. (not case sensitive)
+[17] - If you would like to search for a specific book item, you can use this function to search for your book item by title or by author and see how many copies are left in the library. (not case sensitive)
+  17a. Hit '17' on your keyboard and press enter after.
+  17b. It'll ask you to enter a book title or author.
+  17c. It'll show you a complete list of all the book items that are in the current library that meet the input that was given in previous step. 
+       in this format, [*count available book items*] *title* by *author*.
 
-18 - Lend a book item to a member. It will ask you to give a the id of the member from the list you would like to move forward with. After that, it will ask you to enter the id of the book item from the list you would like to lend out. If it all went succesfully you would see a message like:
+[18] - Lend a book item to a member. It will ask you to give a the id of the member from the list you would like to move forward with. After that, it will ask you to enter the id of the book item from the list you would like to lend out. If it all went succesfully you would see a message like:
+  18a. Hit '18' on your keyboard and press enter after.
+  18b. It'll ask you to enter the digit of the user you would like to move forward with.
+  18c. It'll ask you the digit of the book you would like to move forward with.
+  18c. If it all went successfully you would see a message like:
 ------------------------------------------------------
-You successfully loaned 'Hunger' by Knut Hamsun to Enno Wemmers.
-We expect you to return it before 2023-06-07.
+You successfully loaned *title* by *author* to *user*.
+We expect you to return it before 2023-10-13.
 ------------------------------------------------------
+  18d. Then it'll create an entry of a loan item in the database.
 
 BACKUPS
 
-19 -  Make a backup. A backup will save all data on the database at specific point in time. It will ask you to name the backup or leave it empty if you want return to your home screen. If you did enter a name, a backup with that name will be created and put into the Backup folder.
-20 -  Restore backup. If you need to restore the data to an older version of the data, you can use this function to restore the data of a backup into the system. If no backups are stored, it will tell you "There are no backups found to restore.". Otherwise you need to put in the name of the backup that you would like to restore. After entering the correct name, the data should be updated to the data from the backup.
-21 - Restore and remove backup. If you need to restore the data to an older version of the data and delete the contents afterwards, you can use this function to restore the data of a backup into the system. If no backups are stored, it will tell you "There are no backups found to restore.". Otherwise you need to put in the name of the backup that you would like to restore. After entering the correct name, the data should be updated to the data from the backup and the backup should not exist anymore.
+[19] -  Make a backup. A backup will save all data on the database at specific point in time. It will ask you to name the backup or leave it empty if you want return to your home screen. If you did enter a name, a backup with that name will be created and put into the Backup folder.
+  19a. Hit '19' on your keyboard and press enter after.
+  19b. It'll ask you to give the backup a name, hit enter if you did.
+  19c. If went successfully, it will show this message:
+-------------------------------------------------------------
+The backup was successful.
+-------------------------------------------------------------
+
+[20] -  Restore backup. If you need to restore the data to an older version of the data, you can use this function to restore the data of a backup into the system. If no backups are stored, it will tell you "There are no backups found to restore.". 
+  20a. Hit '20' on your keyboard and press enter after.
+  20b. It'll ask you to choose a backup from the list it provides and enter the digit of that backup, like this:
+------------------------------------------------------------
+Backups to restore (from old to new):
+    [1] Backup backup made at 2023-08-26.
+Enter a digit to choose:
+------------------------------------------------------------
+  20c. If went successfully, it will show you this message:
+-------------------------------------------------------------
+Restoring the backup was successful.
+-------------------------------------------------------------
+  20d. It will replace the current database with the backup database.
+
+[21] - Restore and remove backup. If you need to restore the data to an older version of the data and delete the contents afterwards, you can use this function to restore the data of a backup into the system. If no backups are stored, it will tell you "There are no backups found to restore.". Otherwise you need to put in the name of the backup that you would like to restore. After entering the correct name, the data should be updated to the data from the backup and the backup should not exist anymore.
+  21a. Hit '21' on your keyboard and press enter after.
+  21b. It'll ask you to choose a backup from the list it provides and enter the digit of that backup, like this:
+------------------------------------------------------------
+Backups to restore (from old to new):
+    [1] Backup backup made at 2023-08-26.
+Enter a digit to choose:
+------------------------------------------------------------ 
+  21c. If went successfully, it will show you this message:
+-------------------------------------------------------------
+Restoring the backup was successful.
+-------------------------------------------------------------
+  21d. It will replace the current database with the backup database and remove the backup from the list.
