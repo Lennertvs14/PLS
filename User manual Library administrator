@@ -1,4 +1,4 @@
-Welcome to the user manual for library administrators of this Public Library System!
+Welcome to the user manual for library administrators of this Public Library System! (made by Lennert & Jasper)
 
 When you first launch the system you will be greeted and you will be asked to login using your username and password.
 The log in screen will look as the following:
@@ -239,7 +239,7 @@ There used to be 5 paper printed copies, but there are now 6 paper printed copie
     - enter [1] to continue to the edit, enter the value you want to replace the current value with and press enter.
     - enter [2] to move on to the next value of that book's information.
     - enter [3] to exit the edit screen and update the value changes you made of that book in the database.
-  15d. You will be asked every single piece of information that belongs to that book and give you the same options as previous point (3c).
+  15d. You will be asked every single piece of information that belongs to that book and give you the same options as previous point (15c).
     the list of information contains the following in this particular order:
       - Author
       - Country
